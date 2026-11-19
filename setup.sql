@@ -300,6 +300,9 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 -- ---------- Rechte ----------
+grant usage on schema public to anon, authenticated;
+grant select on public.profiles, public.duels, public.duel_players, public.guesses to authenticated;
+revoke all on public.words_cl, public.cl_secrets, public.wl_answers, public.duel_secrets from anon, authenticated;
 revoke all on function public._wl_score(text,text) from public, anon, authenticated;
 revoke all on function public._check_finish(uuid) from public, anon, authenticated;
 grant execute on function public.create_duel(text,int,uuid[]), public.respond_invite(uuid,boolean), public.submit_guess(uuid,text),
