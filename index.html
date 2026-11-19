@@ -947,7 +947,7 @@ function madHtml(d, me) {
   MAD_TRACK.forEach((c, i) => { const [x, y] = madXY(c); const s = i % 10 === 0 ? i / 10 : -1; f += `<div class="mf ${s >= 0 && s < seats.length ? 'start' : ''}" style="left:${x}%;top:${y}%;${s >= 0 && s < seats.length ? '--c:' + MAD_COL[s] : ''}"></div>`; });
   seats.forEach((u, s) => { MAD_GOAL[s].forEach(c => { const [x, y] = madXY(c); f += `<div class="mf col" style="left:${x}%;top:${y}%;--c:${MAD_COL[s]}"></div>`; }); MAD_HOME[s].forEach(c => { const [x, y] = madXY(c); f += `<div class="mf home" style="left:${x}%;top:${y}%;--c:${MAD_COL[s]}"></div>`; }); });
   // Namen an den Häusern
-  seats.forEach((u, s) => { const [hx, hy] = MAD_HOME[s][0]; const lx = hx < 5 ? 2.2 : 8.8, ly = hy < 5 ? 2.25 : 8.75; const [x, y] = madXY([lx, ly]); f += `<div style="position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%);font-size:12px;font-weight:800;color:${MAD_COL[s]};text-align:center;max-width:16%;line-height:1.1;text-shadow:0 1px 0 #fff">${esc(user(u).display_name.split(' ')[0])}${u === S.me.id ? '<br>(du)' : ''}</div>`; });
+  seats.forEach((u, s) => { const [hx, hy] = MAD_HOME[s][0]; const lx = hx < 5 ? 2.4 : 7.6, ly = hy < 5 ? 2.4 : 7.6; const [x, y] = madXY([lx, ly]); f += `<div style="position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%);font-size:12px;font-weight:800;color:${MAD_COL[s]};text-align:center;max-width:16%;line-height:1.1;text-shadow:0 1px 0 #fff">${esc(user(u).display_name.split(' ')[0])}${u === S.me.id ? '<br>(du)' : ''}</div>`; });
   const disp = S.madDisp[d.id] = S.madDisp[d.id] && S.madBoardDuel === d.id ? S.madDisp[d.id] : JSON.parse(JSON.stringify(st.pos || {}));
   let pcs = '';
   seats.forEach((u, s) => (disp[u] || []).forEach((rel, i) => { const c = madCoord(s, rel, i); if (!c) return; const [x, y] = madXY(c); pcs += `<button class="pc" id="pc-${s}-${i}" data-pc="${i}" data-seat="${s}" style="left:${x}%;top:${y}%;--c:${MAD_COL[s]}" title="${MAD_NAME[s]}"></button>`; }));
@@ -1055,9 +1055,9 @@ async function madKickShow(d, e) {
   const emoji = victim ? pick(['😂', '🤣', '🤡', '👋']) : kicker ? pick(['😈', '😎', '🖐️', '💥']) : pick(['🍿', '😂', '💀']);
   const sub = victim ? `${esc(user(e.u).display_name)} sagt: ${pick(TAUNTS_VICTIM)}` : kicker ? `${pick(TAUNTS_KICKER)} ${esc(user(e.v).display_name)} muss zurück ins Haus.` : `${esc(user(e.u).display_name)} hat ${esc(user(e.v).display_name)} rausgeworfen 🤣`;
   ov.innerHTML = `<div class="kbox"><div class="ke">${emoji}</div><div class="kt">${big}</div><div class="ks">${sub}</div></div>`;
+  emojiRain(victim ? ['😂', '🤣', '👋', '🤡', '😭', '🏠', '💩', '🫵'] : kicker ? ['😈', '💥', '🔥', '😎', '🖐️', '🏆'] : ['🍿', '😂', '🤣', '💀'], victim ? 46 : 28);
   document.body.appendChild(ov); ov.onclick = () => ov.remove();
   sfx(victim ? 'sad' : 'boing');
-  emojiRain(victim ? ['😂', '🤣', '👋', '🤡', '😭', '🏠', '💩', '🫵'] : kicker ? ['😈', '💥', '🔥', '😎', '🖐️', '🏆'] : ['🍿', '😂', '🤣', '💀'], victim ? 46 : 28);
   if (victim && navigator.vibrate) navigator.vibrate([120, 60, 120, 60, 300]);
   await sleep(2300); ov.remove();
 }
