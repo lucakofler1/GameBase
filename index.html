@@ -220,7 +220,7 @@ const SITE_URL = location.origin + location.pathname.replace(/index\.html$/, '')
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { storageKey: 'wortduell-auth', persistSession: true } });
 
 // ===================== Zustand =====================
-const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, lastInvites: null, msgs: [], chatWith: null, msgDraft: {}, friends: [], fq: '', cq: '', wbi: null, bs: null, bsDraft: null, lb: null };
+const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, wbiMode: 'random', lastInvites: null, msgs: [], chatWith: null, msgDraft: {}, friends: [], fq: '', cq: '', wbi: null, bs: null, bsDraft: null, lb: null };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const COLORS = ['#0a84ff', '#30b0c7', '#34c759', '#ff9f0a', '#ff375f', '#bf5af2', '#5e5ce6', '#ff6482', '#64d2ff', '#ac8e68'];
@@ -312,6 +312,7 @@ function turnInfo(d) {
   if (me.status !== 'playing') return { mine: false, label: 'Warte auf andere' };
   if (d.game === 'werbinich') {
     if (st.phase === 'lobby') return d.created_by === S.me.id ? { mine: true, label: 'Spiel starten' } : { mine: false, label: 'Warte auf Start' };
+    if (st.phase === 'assign') return (st.done || []).includes(S.me.id) ? { mine: false, label: 'Warte auf Namen der anderen' } : { mine: true, label: 'Namen vergeben' };
     if (st.qid && st.turn !== S.me.id) return { mine: true, label: `Abstimmen: ${user(st.turn).display_name} fragt` };
     return st.turn === S.me.id ? { mine: true, label: 'Du bist dran – stell eine Frage' } : { mine: false, label: `${user(st.turn).display_name} ist dran` };
   }
@@ -614,7 +615,7 @@ function renderDuel(soft) {
   const d = S.duels.find(x => x.id === S.openDuel);
   if (!d) { $('#app').innerHTML = shell('<div class="empty">Duell nicht gefunden.</div>'); bindShell(); return; }
   if (soft && d.game === 'clueless' && document.activeElement?.id === 'cg') { updateSide(d); return; }
-  if (soft && d.game === 'werbinich' && ['wq', 'wg'].includes(document.activeElement?.id)) { updateSide(d); return; }
+  if (soft && d.game === 'werbinich' && ['wq', 'wg', 'wn'].includes(document.activeElement?.id)) { updateSide(d); return; }
   const me = myRow(d.id); const g = GAME[d.game];
   let top = '';
   if (d.status === 'finished') {
@@ -739,7 +740,22 @@ function wbiHtml(d, me) {
     const acc = ps.filter(p => p.status === 'playing').length;
     return `<h3 style="margin-bottom:6px">🎭 Warteraum</h3><p style="color:var(--mut);margin:0 0 14px">Sobald alle angenommen haben, startet ${esc(user(d.created_by).display_name)} das Spiel. Dann bekommt jeder eine berühmte Person oder Figur – deine eigene siehst du nicht, die der anderen schon.</p>
       <div class="plist">${ps.map(p => `<div class="prow">${av(p.user_id)}<span class="n">${esc(user(p.user_id).display_name)}</span><span class="pill ${STATUS[p.status][1]}">${p.status === 'playing' ? 'Bereit' : STATUS[p.status][0]}</span></div>`).join('')}</div>
-      ${d.created_by === S.me.id && d.status === 'open' ? `<div class="row" style="margin-top:18px"><button class="btn" id="wstart" ${acc < 2 ? 'disabled' : ''}>Spiel starten (${acc} Spieler)</button><span style="color:var(--mut);font-size:13px">Wer bis dahin nicht angenommen hat, ist nicht dabei.</span></div>` : ''}`;
+      ${d.created_by === S.me.id && d.status === 'open' ? `<div class="sec-t">Wie werden die Namen verteilt?</div><div class="grid g2">
+        <button class="choice ${S.wbiMode !== 'assign' ? 'on' : ''}" data-wmode="random"><b style="margin-top:0">🎲 Zufällig</b><small>Jeder bekommt automatisch eine berühmte Person oder Figur.</small></button>
+        <button class="choice ${S.wbiMode === 'assign' ? 'on' : ''}" data-wmode="assign"><b style="margin-top:0">✍️ Gegenseitig vergeben</b><small>Jeder denkt sich einen Namen für die Person nach ihm in der Reihe aus.</small></button></div>
+        <div class="row" style="margin-top:18px"><button class="btn" id="wstart" ${acc < 2 ? 'disabled' : ''}>Spiel starten (${acc} Spieler)</button><span style="color:var(--mut);font-size:13px">Wer bis dahin nicht angenommen hat, ist nicht dabei.</span></div>` : `<p style="color:var(--mut);margin-top:14px">Warte, bis ${esc(user(d.created_by).display_name)} startet …</p>`}`;
+  }
+  if (st.phase === 'assign') {
+    const ord = st.order || []; const i = ord.indexOf(S.me.id); const target = i >= 0 ? ord[(i + 1) % ord.length] : null;
+    const done = st.done || []; const mine = done.includes(S.me.id);
+    const given = W.names.find(n => n.user_id === target && n.assigned_by === S.me.id);
+    return `<h3 style="margin-bottom:6px">✍️ Namen vergeben</h3><p style="color:var(--mut);margin:0 0 14px">Jeder gibt der Person nach sich in der Reihe einen Namen – eine berühmte Person, Figur, ein Tier, was auch immer. Sie selbst sieht ihn nicht.</p>
+      ${me?.status === 'playing' && target ? (mine ? `<div class="qbox"><div class="qt">✓ ${esc(user(target).display_name)} ist: ${esc(given?.name || '…')}</div><p style="color:var(--mut);margin:6px 0 10px">Du kannst den Namen noch ändern, bis alle fertig sind.</p><form id="wnf" class="row" style="flex-wrap:nowrap"><input class="inp" id="wn" placeholder="Anderer Name …" maxlength="60" autocomplete="off"><button class="btn sec">Ändern</button></form></div>`
+        : `<div class="qbox"><div style="display:flex;align-items:center;gap:10px">${av(target)}<div class="qt">Wer soll ${esc(user(target).display_name)} sein?</div></div>
+          <form id="wnf" class="row" style="flex-wrap:nowrap;margin-top:12px"><input class="inp" id="wn" placeholder="z. B. Pumuckl, Elon Musk, ein Pinguin …" maxlength="60" autocomplete="off"><button class="btn">Vergeben</button></form>
+          <button class="btn sec sm" id="wrand" style="margin-top:10px">🎲 Zufälligen Namen nehmen</button></div>`) : ''}
+      <div class="sec-t">Fortschritt (${done.length}/${ord.filter(u => ps.find(p => p.user_id === u)?.status === 'playing').length})</div>
+      <div class="plist">${ord.map(u => `<div class="prow">${av(u)}<span class="n">${esc(user(u).display_name)}${u === S.me.id ? ' (du)' : ''}</span><span style="color:var(--mut);font-size:12px">→ ${esc(user(ord[(ord.indexOf(u) + 1) % ord.length]).display_name)}</span><span class="pill ${done.includes(u) ? 'grn' : 'yel'}">${done.includes(u) ? '✓ vergeben' : 'überlegt …'}</span></div>`).join('')}</div>`;
   }
   const order = st.order || [];
   const nameOf = u => W.names.find(n => n.user_id === u)?.name;
@@ -764,7 +780,11 @@ function wbiHtml(d, me) {
   return `<div class="wcards">${cards}</div>${action}<div class="sec-t" style="margin-top:6px">Verlauf</div><div class="wlog" id="wlog">${log || '<div class="empty">Noch keine Fragen.</div>'}</div>`;
 }
 function bindWbi(d, me) {
-  const s = $('#wstart'); if (s) s.onclick = async () => { s.disabled = true; const { error } = await sb.rpc('wbi_start', { p_duel: d.id }); if (error) { toast(errMsg(error), 1); s.disabled = false; return; } await loadAll(); renderDuel(); };
+  document.querySelectorAll('[data-wmode]').forEach(b => b.onclick = () => { S.wbiMode = b.dataset.wmode; renderDuel(); });
+  const s = $('#wstart'); if (s) s.onclick = async () => { s.disabled = true; const { error } = await sb.rpc('wbi_start', { p_duel: d.id, p_mode: S.wbiMode === 'assign' ? 'assign' : 'random' }); if (error) { toast(errMsg(error), 1); s.disabled = false; return; } await loadAll(); renderDuel(); };
+  const setName = async nm => { const { data, error } = await sb.rpc('wbi_set_name', { p_duel: d.id, p_name: nm }); if (error) return toast(errMsg(error), 1); toast(`✓ Name vergeben: ${data}`); await loadAll(); renderDuel(); };
+  const nf = $('#wnf'); if (nf) nf.onsubmit = e => { e.preventDefault(); const v = $('#wn').value.trim(); if (v.length < 2) return toast('Bitte einen Namen eingeben', 1); setName(v); };
+  const wr = $('#wrand'); if (wr) wr.onclick = () => setName(null);
   document.querySelectorAll('[data-vote]').forEach(b => b.onclick = async () => { const { error } = await sb.rpc('wbi_vote', { p_duel: d.id, p_vote: b.dataset.vote === '1' }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); });
   const qf = $('#wqf'); if (qf) qf.onsubmit = async e => { e.preventDefault(); const t = $('#wq').value.trim(); if (!t) return; const { error } = await sb.rpc('wbi_ask', { p_duel: d.id, p_text: t }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); };
   const gf = $('#wgf'); if (gf) gf.onsubmit = async e => { e.preventDefault(); const t = $('#wg').value.trim(); if (!t) return;
@@ -981,7 +1001,7 @@ function showHelp() {
     <h3>⚔️ Duell starten</h3><p>Unter <b>Neues Duell</b> wählst du das Spiel und hakst Freunde an. Die Eingeladenen sehen die Einladung sofort und nehmen an oder lehnen ab. Wordless/Clueless gehen auch allein als Übung (zählt nicht für die Rangliste).</p>
     <h3>🟩 Wordless</h3><p>Du hast 6 Versuche. Jeder Versuch muss ein echtes deutsches Wort mit der richtigen Länge sein.<br><b style="color:var(--grn)">Grün</b> = Buchstabe stimmt an dieser Stelle · <b style="color:#d49a00">Gelb</b> = Buchstabe kommt vor, aber woanders · <b style="color:var(--gry)">Grau</b> = kommt nicht vor. Tippen geht mit der Tastatur am Bildschirm oder am Computer.</p>
     <h3>🎯 Clueless</h3><p>Keine Buchstaben, keine Hinweise. Jedes Wort, das du eingibst, bekommt einen <b>Rang</b>: wie nah es von der <i>Bedeutung</i> her am geheimen Wort liegt. Rang 1 ist das Wort selbst, Rang 2 das ähnlichste usw. Starte mit breiten Begriffen („Tier“, „Essen“, „Gefühl“, „Ort“) und geh in die Richtung, in der die Zahl kleiner wird. Unbegrenzt viele Versuche – wenn's nicht klappt, kannst du aufgeben.</p>
-    <h3>🎭 Wer bin ich?</h3><p>Ab 2 Spielern. Wer das Spiel erstellt, startet es, sobald alle angenommen haben. Jeder bekommt eine berühmte Person oder Figur – deine eigene siehst du nicht, die der anderen schon. Wer dran ist, stellt eine Ja/Nein-Frage. Alle anderen stimmen <b>RICHTIG</b> oder <b>FALSCH</b> ab – es zählt die Mehrheit (bei Gleichstand FALSCH). Bei RICHTIG darfst du nochmal fragen, bei FALSCH ist der Nächste dran. Mit „Lösen“ rätst du deinen Namen (kleine Tippfehler und nur der Nachname zählen auch). Falsch geraten = der Nächste ist dran. Gewonnen hat, wer zuerst richtig rät; die anderen spielen um die Plätze weiter.</p>
+    <h3>🎭 Wer bin ich?</h3><p>Ab 2 Spielern. Wer das Spiel erstellt, startet es, sobald alle angenommen haben. Die Namen werden entweder <b>zufällig</b> verteilt (berühmte Personen und Figuren) oder <b>gegenseitig vergeben</b>: Dann denkt sich jeder einen Namen für die Person nach ihm in der Reihe aus (oder nimmt per 🎲 einen zufälligen). Das wählt, wer das Spiel startet. Deinen eigenen Namen siehst du nicht, die der anderen schon. Wer dran ist, stellt eine Ja/Nein-Frage. Alle anderen stimmen <b>RICHTIG</b> oder <b>FALSCH</b> ab – es zählt die Mehrheit (bei Gleichstand FALSCH). Bei RICHTIG darfst du nochmal fragen, bei FALSCH ist der Nächste dran. Mit „Lösen“ rätst du deinen Namen (kleine Tippfehler und nur der Nachname zählen auch). Falsch geraten = der Nächste ist dran. Gewonnen hat, wer zuerst richtig rät; die anderen spielen um die Plätze weiter.</p>
     <h3>🚢 Schiffe versenken</h3><p>Zu zweit. Beide platzieren ihre Flotte (5er, 4er, zwei 3er, 2er – mit „Neu mischen“ zufällig), dann „Bereit“. Wer beginnt, wird ausgelost. Klick auf ein Feld beim Gegner: <b>Wasser</b> = der andere ist dran, <b>Treffer</b> = du darfst nochmal. Wer zuerst alle 17 Schiffsfelder trifft, gewinnt.</p>
     <h3>👀 Live-Stand</h3><p>Rechts (am Handy oben) siehst du live, wie viele Versuche jeder hat und wer schon fertig ist – aber <b>nie, was die anderen eingeben</b>. Das Lösungswort wird erst angezeigt, wenn alle fertig sind.</p>
     <h3>🏆 Wer gewinnt?</h3><p>Wer das Wort mit den <b>wenigsten Versuchen</b> löst. Bei Gleichstand gewinnt, wer zuerst fertig war. Das Duell endet automatisch, wenn alle fertig sind oder abgelehnt haben. Wer das Duell erstellt hat, kann es auch vorzeitig beenden.</p>
