@@ -137,6 +137,25 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .toast.err{background:var(--red);color:#fff}
 @keyframes tin{from{opacity:0;transform:translateY(10px)}}
 .invite{white-space:pre-wrap;background:var(--soft);border-radius:12px;padding:14px;font-size:14px;margin:10px 0}
+.chat{display:grid;grid-template-columns:280px 1fr;gap:14px;height:calc(100vh - 200px);min-height:420px}
+.clist{overflow:auto;padding:6px}
+.citem{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;cursor:pointer}
+.citem:hover{background:var(--soft)}
+.citem.on{background:color-mix(in srgb,var(--acc) 12%,transparent)}
+.citem .pv{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ubadge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--acc);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+.cwin{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.chead{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.cmsgs{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:6px}
+.bub{max-width:75%;padding:9px 13px;border-radius:18px;white-space:pre-wrap;word-wrap:break-word;font-size:15px}
+.bub.me{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:6px}
+.bub.them{align-self:flex-start;background:var(--soft);border-bottom-left-radius:6px}
+.btime{font-size:11px;color:var(--mut);margin:4px 6px 2px}
+.btime.me{align-self:flex-end}
+.dsep{align-self:center;font-size:12px;color:var(--mut);margin:10px 0 4px}
+.cform{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.cform textarea{resize:none;height:44px;max-height:120px}
+@media (max-width:700px){.chat{grid-template-columns:1fr;height:calc(100vh - 230px)}.chat.open .clist{display:none}.chat:not(.open) .cwin{display:none}}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:10px 0 30px}
 @media (max-width:700px){.tabs{position:fixed;bottom:0;left:0;right:0;border-radius:0;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);z-index:25}.tab{flex:1;font-size:13px;padding:8px 4px}main{padding-bottom:110px}.h1{font-size:26px}.bar .spacer{flex:1}}
 </style>
@@ -154,7 +173,7 @@ const SITE_URL = location.origin + location.pathname.replace(/index\.html$/, '')
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { storageKey: 'wortduell-auth', persistSession: true } });
 
 // ===================== Zustand =====================
-const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, lastInvites: null };
+const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, lastInvites: null, msgs: [], chatWith: null, msgDraft: {} };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const COLORS = ['#0a84ff', '#30b0c7', '#34c759', '#ff9f0a', '#ff375f', '#bf5af2', '#5e5ce6', '#ff6482', '#64d2ff', '#ac8e68'];
@@ -180,11 +199,24 @@ async function loadAll() {
   const ids = [...new Set(S.players.map(p => p.duel_id))];
   if (ids.length) { const d = await sb.from('duels').select('*').in('id', ids).order('created_at', { ascending: false }); S.duels = d.data || []; } else S.duels = [];
   S.profile = S.users.find(x => x.id === S.me.id) || S.profile;
+  await loadMsgs();
   // neue Einladungen melden
   const inv = myInvites().map(d => d.id);
   if (S.lastInvites) inv.filter(i => !S.lastInvites.includes(i)).forEach(i => { const d = S.duels.find(x => x.id === i); toast(`🎯 Neue Duell-Einladung von ${user(d?.created_by).display_name}`); notify('Neue Duell-Einladung', `${user(d?.created_by).display_name} fordert dich heraus!`); });
   S.lastInvites = inv;
 }
+let msgsInit = false;
+async function loadMsgs() {
+  const { data, error } = await sb.from('messages').select('*').order('created_at', { ascending: true }).limit(2000);
+  if (error) return;
+  const old = new Set(S.msgs.map(m => m.id));
+  if (msgsInit) data.filter(m => !old.has(m.id) && m.to_id === S.me.id).forEach(m => {
+    if (!(S.tab === 'chat' && S.chatWith === m.from_id && !document.hidden)) { toast(`💬 ${user(m.from_id).display_name}: ${m.body.slice(0, 60)}`); notify('Neue Nachricht von ' + user(m.from_id).display_name, m.body.slice(0, 120)); }
+  });
+  S.msgs = data; msgsInit = true;
+}
+const unreadFrom = id => S.msgs.filter(m => m.to_id === S.me.id && m.from_id === id && !m.read_at).length;
+const unreadTotal = () => S.msgs.filter(m => m.to_id === S.me.id && !m.read_at).length;
 const playersOf = id => S.players.filter(p => p.duel_id === id);
 const myRow = id => S.players.find(p => p.duel_id === id && p.user_id === S.me.id);
 const myInvites = () => S.duels.filter(d => d.status === 'open' && myRow(d.id)?.status === 'invited');
@@ -204,6 +236,7 @@ function startLive() {
   rtChannel = sb.channel('wd-live')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'duel_players' }, scheduleRefresh)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'duels' }, scheduleRefresh)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, scheduleRefresh)
     .subscribe();
   clearInterval(pollT); pollT = setInterval(() => { if (!document.hidden) refresh(); }, 6000);
 }
@@ -252,6 +285,7 @@ function shell(content) {
     <nav class="tabs">
       <button class="tab ${S.tab === 'duels' ? 'on' : ''}" data-tab="duels">Duelle${badge ? `<span class="dot">${badge}</span>` : ''}</button>
       <button class="tab ${S.tab === 'new' ? 'on' : ''}" data-tab="new">Neues Duell</button>
+      <button class="tab ${S.tab === 'chat' ? 'on' : ''}" data-tab="chat">Nachrichten${unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : ''}</button>
       <button class="tab ${S.tab === 'rank' ? 'on' : ''}" data-tab="rank">Rangliste</button>
       ${S.profile?.is_admin ? `<button class="tab ${S.tab === 'admin' ? 'on' : ''}" data-tab="admin">Admin</button>` : ''}
     </nav>
@@ -267,8 +301,9 @@ function shell(content) {
 function render(soft) {
   if (!S.me) return;
   if (S.openDuel) return renderDuel(soft);
-  if (soft && document.activeElement && ['INPUT', 'SELECT'].includes(document.activeElement.tagName)) return; // beim Tippen nicht stören
-  const views = { duels: viewDuels, new: viewNew, rank: viewRank, admin: viewAdmin };
+  if (soft && S.tab === 'chat' && $('#clist')) { updateChat(); return; }
+  if (soft && document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return; // beim Tippen nicht stören
+  const views = { duels: viewDuels, new: viewNew, rank: viewRank, admin: viewAdmin, chat: viewChat };
   const v = (views[S.tab] || viewDuels)();
   $('#app').innerHTML = shell(v.html);
   bindShell(); v.bind && v.bind();
@@ -470,11 +505,12 @@ function renderDuel(soft) {
 }
 function updateSide(d) {
   const el = $('#side'); if (!el) return;
+  setTimeout(() => el.querySelectorAll('[data-msg]').forEach(b => b.onclick = () => openChat(b.dataset.msg)), 0);
   const ps = playersOf(d.id).filter(p => p.status !== 'declined').sort((a, b) => (a.status === 'solved' ? 0 : 1) - (b.status === 'solved' ? 0 : 1) || a.attempts - b.attempts);
   el.innerHTML = `<div class="row" style="margin-bottom:6px"><b>Live-Stand</b><span class="spacer"></span>${d.status === 'open' ? '<span class="pill grn">● live</span>' : '<span class="pill">beendet</span>'}</div>
     <p style="color:var(--mut);font-size:12px;margin:0 0 6px">Du siehst nur, wie viele Versuche die anderen haben – nicht, was sie eingeben.</p>
-    ${ps.map(p => `<div class="lrow">${av(p.user_id)}<div style="flex:1;min-width:0"><b>${esc(user(p.user_id).display_name)}${p.user_id === S.me.id ? ' (du)' : ''}</b> ${d.winner_id === p.user_id ? '🏆' : ''}<div class="meta"><span class="pill ${STATUS[p.status][1]}" style="font-size:11px">${STATUS[p.status][0]}</span>${d.game === 'clueless' && p.best_rank ? ` · bester Rang ${p.best_rank.toLocaleString('de-AT')}` : ''}</div></div><div style="text-align:right"><div class="big">${p.attempts}</div><div class="meta">${d.game === 'wordless' ? 'von 6' : 'Versuche'}</div></div></div>`).join('')}
-    ${playersOf(d.id).some(p => p.status === 'declined') ? `<p style="color:var(--mut);font-size:12px;margin:8px 0 0">Abgelehnt: ${playersOf(d.id).filter(p => p.status === 'declined').map(p => esc(user(p.user_id).display_name)).join(', ')}</p>` : ''}`;
+    ${ps.map(p => `<div class="lrow">${av(p.user_id)}<div style="flex:1;min-width:0"><b>${esc(user(p.user_id).display_name)}${p.user_id === S.me.id ? ' (du)' : ''}</b> ${d.winner_id === p.user_id ? '🏆' : ''}${p.user_id !== S.me.id ? ` <button class="btn sec sm" style="padding:2px 7px" data-msg="${p.user_id}" title="Nachricht schreiben">💬</button>` : ''}<div class="meta"><span class="pill ${STATUS[p.status][1]}" style="font-size:11px">${STATUS[p.status][0]}</span>${d.game === 'clueless' && p.best_rank ? ` · bester Rang ${p.best_rank.toLocaleString('de-AT')}` : ''}</div></div><div style="text-align:right"><div class="big">${p.attempts}</div><div class="meta">${d.game === 'wordless' ? 'von 6' : 'Versuche'}</div></div></div>`).join('')}
+    ${''}${playersOf(d.id).some(p => p.status === 'declined') ? `<p style="color:var(--mut);font-size:12px;margin:8px 0 0">Abgelehnt: ${playersOf(d.id).filter(p => p.status === 'declined').map(p => esc(user(p.user_id).display_name)).join(', ')}</p>` : ''}`;
 }
 
 // ----- Wordless -----
@@ -560,6 +596,75 @@ function bindClueless(d, me) {
   };
 }
 
+// ---------- Nachrichten ----------
+function openChat(id) { S.openDuel = null; history.replaceState(null, '', location.pathname); S.tab = 'chat'; S.chatWith = id; S.menu = false; render(); }
+function convList() {
+  const others = S.users.filter(u => u.id !== S.me.id);
+  const last = id => { const ms = S.msgs.filter(m => (m.from_id === id && m.to_id === S.me.id) || (m.to_id === id && m.from_id === S.me.id)); return ms[ms.length - 1]; };
+  return others.map(u => ({ u, last: last(u.id) })).sort((a, b) => (b.last ? new Date(b.last.created_at) : 0) - (a.last ? new Date(a.last.created_at) : 0) || a.u.display_name.localeCompare(b.u.display_name));
+}
+function chatMsgsHtml(id) {
+  const ms = S.msgs.filter(m => (m.from_id === id && m.to_id === S.me.id) || (m.to_id === id && m.from_id === S.me.id));
+  if (!ms.length) return `<div class="empty" style="margin:auto">Noch keine Nachrichten. Schreib ${esc(user(id).display_name.split(' ')[0])} die erste!</div>`;
+  let out = '', lastDay = '';
+  ms.forEach((m, i) => {
+    const day = new Date(m.created_at).toLocaleDateString('de-AT', { weekday: 'short', day: '2-digit', month: '2-digit' });
+    if (day !== lastDay) { out += `<div class="dsep">${day}</div>`; lastDay = day; }
+    const mine = m.from_id === S.me.id;
+    out += `<div class="bub ${mine ? 'me' : 'them'}">${esc(m.body)}</div>`;
+    const nx = ms[i + 1];
+    if (!nx || nx.from_id !== m.from_id || new Date(nx.created_at) - new Date(m.created_at) > 300000)
+      out += `<div class="btime ${mine ? 'me' : ''}">${new Date(m.created_at).toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' })}${mine && m === ms[ms.length - 1] ? (m.read_at ? ' · gelesen' : ' · gesendet') : ''}</div>`;
+  });
+  return out;
+}
+function convListHtml() {
+  const L = convList();
+  if (!L.length) return '<div class="empty">Noch keine anderen Spieler.</div>';
+  return L.map(({ u, last }) => { const n = unreadFrom(u.id); return `<div class="citem ${S.chatWith === u.id ? 'on' : ''}" data-chat="${u.id}">${av(u.id)}<div style="flex:1;min-width:0"><b>${esc(u.display_name)}</b><div class="pv">${last ? (last.from_id === S.me.id ? 'Du: ' : '') + esc(last.body) : '@' + esc(u.username)}</div></div>${n ? `<span class="ubadge">${n}</span>` : ''}</div>`; }).join('');
+}
+function viewChat() {
+  const w = S.chatWith && S.users.find(u => u.id === S.chatWith) ? S.chatWith : null;
+  return {
+    html: `<div class="h1">Nachrichten</div><div class="sub">Schreib direkt mit anderen Spielern – nur ihr beide könnt die Nachrichten lesen.</div>
+    <div class="chat ${w ? 'open' : ''}"><div class="card clist" id="clist">${convListHtml()}</div>
+    <div class="card cwin">${w ? `<div class="chead"><button class="btn sec sm" id="cback">←</button>${av(w)}<div style="flex:1"><b>${esc(user(w).display_name)}</b><div class="meta" style="font-size:12px;color:var(--mut)">@${esc(user(w).username)}</div></div><button class="btn sec sm" id="cduel">⚔️ Herausfordern</button></div>
+      <div class="cmsgs" id="cmsgs">${chatMsgsHtml(w)}</div>
+      <form class="cform" id="cf2"><textarea class="inp" id="ct" placeholder="Nachricht …" maxlength="2000">${esc(S.msgDraft[w] || '')}</textarea><button class="btn">Senden</button></form>`
+      : '<div class="empty" style="margin:auto;border:0">Wähle links eine Person aus.</div>'}</div></div>`,
+    bind() {
+      document.querySelectorAll('[data-chat]').forEach(c => c.onclick = () => { S.chatWith = c.dataset.chat; render(); });
+      if (!w) return;
+      const box = $('#cmsgs'); box.scrollTop = box.scrollHeight;
+      markRead(w);
+      $('#cback').onclick = () => { S.chatWith = null; render(); };
+      $('#cduel').onclick = () => { S.newDuel.opp = new Set([w]); S.tab = 'new'; render(); };
+      const t = $('#ct'); t.oninput = () => { S.msgDraft[w] = t.value; t.style.height = '44px'; t.style.height = Math.min(120, t.scrollHeight) + 'px'; };
+      t.onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#cf2').requestSubmit(); } };
+      if (matchMedia('(min-width:701px)').matches) t.focus();
+      $('#cf2').onsubmit = async e => {
+        e.preventDefault(); const body = t.value.trim(); if (!body || S.busy) return;
+        S.busy = true; const { error } = await sb.rpc('send_message', { p_to: w, p_body: body }); S.busy = false;
+        if (error) return toast(errMsg(error), 1);
+        S.msgDraft[w] = ''; t.value = ''; t.style.height = '44px';
+        await loadMsgs(); updateChat(); t.focus();
+      };
+    }
+  };
+}
+function updateChat() {
+  const w = S.chatWith; const box = $('#cmsgs'); const cl = $('#clist');
+  if (cl) { cl.innerHTML = convListHtml(); cl.querySelectorAll('[data-chat]').forEach(c => c.onclick = () => { S.chatWith = c.dataset.chat; render(); }); }
+  if (box && w) { const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80; box.innerHTML = chatMsgsHtml(w); if (atBottom) box.scrollTop = box.scrollHeight; markRead(w); }
+  const tab = document.querySelector('[data-tab=chat]'); if (tab) tab.innerHTML = 'Nachrichten' + (unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : '');
+}
+async function markRead(w) {
+  if (!S.msgs.some(m => m.from_id === w && m.to_id === S.me.id && !m.read_at)) return;
+  S.msgs.forEach(m => { if (m.from_id === w && m.to_id === S.me.id && !m.read_at) m.read_at = new Date().toISOString(); });
+  await sb.rpc('mark_read', { p_other: w });
+  const tab = document.querySelector('[data-tab=chat]'); if (tab) tab.innerHTML = 'Nachrichten' + (unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : '');
+}
+
 // ===================== Dialoge =====================
 function modal(html, bind) {
   const o = document.createElement('div'); o.className = 'ov'; o.innerHTML = `<div class="modal">${html}</div>`;
@@ -593,6 +698,7 @@ function showHelp() {
     <h3>🎯 Clueless</h3><p>Keine Buchstaben, keine Hinweise. Jedes Wort, das du eingibst, bekommt einen <b>Rang</b>: wie nah es von der <i>Bedeutung</i> her am geheimen Wort liegt. Rang 1 ist das Wort selbst, Rang 2 das ähnlichste usw. Starte mit breiten Begriffen („Tier“, „Essen“, „Gefühl“, „Ort“) und geh in die Richtung, in der die Zahl kleiner wird. Unbegrenzt viele Versuche – wenn's nicht klappt, kannst du aufgeben.</p>
     <h3>👀 Live-Stand</h3><p>Rechts (am Handy oben) siehst du live, wie viele Versuche jeder hat und wer schon fertig ist – aber <b>nie, was die anderen eingeben</b>. Das Lösungswort wird erst angezeigt, wenn alle fertig sind.</p>
     <h3>🏆 Wer gewinnt?</h3><p>Wer das Wort mit den <b>wenigsten Versuchen</b> löst. Bei Gleichstand gewinnt, wer zuerst fertig war. Das Duell endet automatisch, wenn alle fertig sind oder abgelehnt haben. Wer das Duell erstellt hat, kann es auch vorzeitig beenden.</p>
+    <h3>💬 Nachrichten</h3><p>Im Tab <b>Nachrichten</b> schreibst du direkt mit einem anderen Spieler – nur ihr beide seht den Chat. Neue Nachrichten erscheinen live, ungelesene zählt der rote Punkt. Enter sendet, Shift+Enter macht eine neue Zeile. Mit „⚔️ Herausfordern“ startest du direkt ein Duell gegen die Person, im Live-Stand eines Duells öffnet 💬 den Chat.</p>
     <h3>📊 Rangliste</h3><p>Zeigt alle Siege, gespielte Duelle, Siegquote und Siege je Spiel.</p>
     <h3>🔑 Konto</h3><p>Accounts legt nur Luca (Admin) an. Dein Passwort änderst du über den runden Knopf oben rechts. Dort kannst du auch Browser-Benachrichtigungen für neue Einladungen einschalten.</p>
     ${S.profile?.is_admin ? `<h3>🛠 Admin</h3><p>Im Tab <b>Admin</b>: Account anlegen → die fertige Nachricht mit Link, Benutzername und Passwort kopieren oder per WhatsApp schicken. „Neues Passwort“ setzt ein vergessenes Passwort zurück. Die Wortdaten müssen nur einmal geladen werden.</p>` : ''}
