@@ -156,6 +156,53 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .cform{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
 .cform textarea{resize:none;height:44px;max-height:120px}
 @media (max-width:700px){.chat{grid-template-columns:1fr;height:calc(100vh - 230px)}.chat.open .clist{display:none}.chat:not(.open) .cwin{display:none}}
+.gico.p{background:linear-gradient(135deg,#bf5af2,#5e5ce6);color:#fff}
+.gico.s{background:linear-gradient(135deg,#0a84ff,#64d2ff);color:#fff}
+.pushes{position:fixed;top:70px;right:16px;z-index:70;display:flex;flex-direction:column;gap:10px;width:340px;max-width:calc(100vw - 32px)}
+.push{display:flex;gap:11px;align-items:flex-start;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:0 10px 40px rgba(0,0,0,.18);cursor:pointer;animation:pin .35s cubic-bezier(.2,.9,.3,1.2)}
+.push .av{width:36px;height:36px;font-size:15px}
+.push b{display:block;font-size:14px}.push .pb{font-size:13px;color:var(--mut);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.push .pa{font-size:11px;color:var(--mut);margin-left:auto;white-space:nowrap}
+.push.out{animation:pout .3s forwards}
+@keyframes pin{from{opacity:0;transform:translateX(40px)}}
+@keyframes pout{to{opacity:0;transform:translateX(40px)}}
+.rankb{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;color:#fff}
+.rankcard{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.rankcard .ri{font-size:44px}
+.prog{height:8px;background:var(--soft);border-radius:6px;overflow:hidden;margin-top:8px}.prog>div{height:100%;border-radius:6px}
+.ranks{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.search{position:relative;margin-bottom:10px}.search input{padding-left:34px}.search:before{content:'🔍';position:absolute;left:11px;top:10px;font-size:14px;opacity:.6}
+/* Wer bin ich */
+.wcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.wcard{border-radius:16px;padding:14px;background:var(--soft);text-align:center;position:relative}
+.wcard.turn{outline:2.5px solid var(--acc)}
+.wcard .wn{font-weight:800;font-size:16px;margin-top:6px;letter-spacing:-.01em}
+.wcard .av{margin:0 auto}
+.wcard.me .wn{font-size:26px}
+.vote{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.vote button{padding:18px;font-size:18px;border-radius:16px}
+.btn.grn{background:var(--grn)}
+.qbox{background:color-mix(in srgb,var(--acc) 8%,var(--card));border:1.5px solid color-mix(in srgb,var(--acc) 30%,transparent);border-radius:18px;padding:18px;margin-bottom:16px}
+.qbox .qt{font-size:20px;font-weight:700;margin:4px 0}
+.wlog{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto}
+.wli{display:flex;gap:8px;align-items:center;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--soft)}
+.wli .q{flex:1}
+/* Schiffe */
+.bsw{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:820px){.bsw{grid-template-columns:1fr}}
+.grid10{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;aspect-ratio:1;max-width:400px;margin:0 auto;width:100%}
+.cell{border-radius:5px;background:color-mix(in srgb,var(--acc) 10%,var(--soft));display:grid;place-items:center;font-size:13px;font-weight:700;border:0;padding:0;color:#fff;aspect-ratio:1}
+button.cell{cursor:pointer}button.cell:hover{background:color-mix(in srgb,var(--acc) 30%,var(--soft))}
+.cell.ship{background:#8e8e93}
+.cell.miss{background:var(--soft)}.cell.miss:after{content:'•';color:var(--mut)}
+.cell.hit{background:#ff9f0a}.cell.hit:after{content:'✕'}
+.cell.sunk{background:#ff3b30}.cell.sunk:after{content:'✕'}
+.cell.last{outline:2.5px solid var(--acc)}
+.bst{text-align:center;font-weight:700;margin-bottom:8px}
+.legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px}
+.tab .s{display:none}
+@media (max-width:700px){.tab .l{display:none}.tab .s{display:inline}.pushes{top:12px;right:12px;left:12px;width:auto;max-width:none}}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:10px 0 30px}
 @media (max-width:700px){.tabs{position:fixed;bottom:0;left:0;right:0;border-radius:0;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);z-index:25}.tab{flex:1;font-size:13px;padding:8px 4px}main{padding-bottom:110px}.h1{font-size:26px}.bar .spacer{flex:1}}
 </style>
@@ -173,7 +220,7 @@ const SITE_URL = location.origin + location.pathname.replace(/index\.html$/, '')
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { storageKey: 'wortduell-auth', persistSession: true } });
 
 // ===================== Zustand =====================
-const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, lastInvites: null, msgs: [], chatWith: null, msgDraft: {} };
+const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, lastInvites: null, msgs: [], chatWith: null, msgDraft: {}, friends: [], fq: '', cq: '', wbi: null, bs: null, bsDraft: null, lb: null };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const COLORS = ['#0a84ff', '#30b0c7', '#34c759', '#ff9f0a', '#ff375f', '#bf5af2', '#5e5ce6', '#ff6482', '#64d2ff', '#ac8e68'];
@@ -184,7 +231,22 @@ const toast = (msg, err) => { const t = document.createElement('div'); t.classNa
 const errMsg = e => (e && (e.message || e.error_description)) || String(e);
 const genPw = () => { const a = 'abcdefghjkmnpqrstuvwxyz', d = '23456789'; let s = ''; for (let i = 0; i < 6; i++) s += a[Math.floor(Math.random() * a.length)]; for (let i = 0; i < 3; i++) s += d[Math.floor(Math.random() * d.length)]; return s; };
 const fmtDate = t => t ? new Date(t).toLocaleString('de-AT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
-const GAME = { wordless: { name: 'Wordless', ico: 'W', cls: 'w', desc: 'Errate das Wort in 6 Versuchen – Farben zeigen dir, welche Buchstaben stimmen.' }, clueless: { name: 'Clueless', ico: '?', cls: 'c', desc: 'Keine Hinweise: Jedes Wort bekommt einen Rang, wie nah es von der Bedeutung her am geheimen Wort liegt.' } };
+const GAME = {
+  wordless: { name: 'Wordless', ico: 'W', cls: 'w', unit: 'Versuche', desc: 'Errate das Wort in 6 Versuchen – Farben zeigen dir, welche Buchstaben stimmen.' },
+  clueless: { name: 'Clueless', ico: '?', cls: 'c', unit: 'Versuche', desc: 'Keine Hinweise: Jedes Wort bekommt einen Rang, wie nah es von der Bedeutung her am geheimen Wort liegt.' },
+  werbinich: { name: 'Wer bin ich?', ico: '🎭', cls: 'p', unit: 'Fragen', desc: 'Jeder bekommt eine berühmte Person oder Figur. Stell Ja/Nein-Fragen – die anderen stimmen RICHTIG oder FALSCH ab. Ab 2 Spielern.' },
+  schiffe: { name: 'Schiffe versenken', ico: '🚢', cls: 's', unit: 'Schüsse', desc: 'Der Klassiker zu zweit: Flotte platzieren, abwechselnd schießen – wer zuerst alle Schiffe versenkt, gewinnt.' },
+};
+const RANKS = [
+  { min: 0, name: 'Bronze', ico: '🥉', c: '#ac8e68' }, { min: 60, name: 'Silber', ico: '🥈', c: '#8e8e93' }, { min: 150, name: 'Gold', ico: '🥇', c: '#d4a017' },
+  { min: 300, name: 'Platin', ico: '💠', c: '#30b0c7' }, { min: 500, name: 'Diamant', ico: '💎', c: '#0a84ff' }, { min: 800, name: 'Meister', ico: '👑', c: '#bf5af2' }, { min: 1200, name: 'Legende', ico: '🔥', c: '#ff375f' }];
+const rankOf = pts => [...RANKS].reverse().find(r => pts >= r.min);
+const nextRank = pts => RANKS.find(r => r.min > pts);
+const rankBadge = pts => { const r = rankOf(pts || 0); return `<span class="rankb" style="background:${r.c}">${r.ico} ${r.name}</span>`; };
+const isFriend = id => S.friends.some(f => f.status === 'accepted' && (f.user_a === id || f.user_b === id));
+const friendRow = id => S.friends.find(f => f.user_a === id || f.user_b === id);
+const incomingReq = () => S.friends.filter(f => f.status === 'pending' && f.requested_by !== S.me.id);
+const myFriends = () => S.users.filter(u => u.id !== S.me.id && isFriend(u.id));
 const STATUS = { invited: ['Eingeladen', 'yel'], playing: ['Spielt', 'blu'], solved: ['Gelöst', 'grn'], failed: ['Nicht geschafft', 'red'], gave_up: ['Aufgegeben', 'red'], declined: ['Abgelehnt', ''] };
 
 // ===================== Daten =====================
@@ -199,10 +261,15 @@ async function loadAll() {
   const ids = [...new Set(S.players.map(p => p.duel_id))];
   if (ids.length) { const d = await sb.from('duels').select('*').in('id', ids).order('created_at', { ascending: false }); S.duels = d.data || []; } else S.duels = [];
   S.profile = S.users.find(x => x.id === S.me.id) || S.profile;
-  await loadMsgs();
+  await Promise.all([loadMsgs(), loadFriends(), loadLb(), S.openDuel ? loadGameData(S.openDuel) : null]);
+  // Zug-Hinweise
+  const turns = myTurn().map(d => d.id + ':' + (d.state?.turn || '') + ':' + (d.state?.qid || ''));
+  if (S.lastTurns) myTurn().filter(d => !S.lastTurns.includes(d.id + ':' + (d.state?.turn || '') + ':' + (d.state?.qid || '')) && ['werbinich', 'schiffe'].includes(d.game) && S.openDuel !== d.id)
+    .forEach(d => push({ uid: d.created_by, title: GAME[d.game].name, body: turnInfo(d).label, onclick: () => openDuel(d.id) }));
+  S.lastTurns = turns;
   // neue Einladungen melden
   const inv = myInvites().map(d => d.id);
-  if (S.lastInvites) inv.filter(i => !S.lastInvites.includes(i)).forEach(i => { const d = S.duels.find(x => x.id === i); toast(`🎯 Neue Duell-Einladung von ${user(d?.created_by).display_name}`); notify('Neue Duell-Einladung', `${user(d?.created_by).display_name} fordert dich heraus!`); });
+  if (S.lastInvites) inv.filter(i => !S.lastInvites.includes(i)).forEach(i => { const d = S.duels.find(x => x.id === i); push({ uid: d?.created_by, title: `⚔️ ${user(d?.created_by).display_name} fordert dich heraus`, body: `${GAME[d?.game]?.name || 'Duell'} – tippe zum Annehmen`, onclick: () => openDuel(i) }); notify('Neue Duell-Einladung', `${user(d?.created_by).display_name} fordert dich heraus!`); });
   S.lastInvites = inv;
 }
 let msgsInit = false;
@@ -211,16 +278,55 @@ async function loadMsgs() {
   if (error) return;
   const old = new Set(S.msgs.map(m => m.id));
   if (msgsInit) data.filter(m => !old.has(m.id) && m.to_id === S.me.id).forEach(m => {
-    if (!(S.tab === 'chat' && S.chatWith === m.from_id && !document.hidden)) { toast(`💬 ${user(m.from_id).display_name}: ${m.body.slice(0, 60)}`); notify('Neue Nachricht von ' + user(m.from_id).display_name, m.body.slice(0, 120)); }
+    if (!(S.tab === 'chat' && S.chatWith === m.from_id && !S.openDuel && !document.hidden)) { push({ uid: m.from_id, title: user(m.from_id).display_name, body: m.body, onclick: () => openChat(m.from_id) }); notify('Neue Nachricht von ' + user(m.from_id).display_name, m.body.slice(0, 120)); }
   });
   S.msgs = data; msgsInit = true;
+}
+let friendsInit = false;
+async function loadFriends() {
+  const { data, error } = await sb.from('friendships').select('*'); if (error) return;
+  if (friendsInit) {
+    const old = S.friends;
+    data.filter(f => f.status === 'pending' && f.requested_by !== S.me.id && !old.some(o => o.user_a === f.user_a && o.user_b === f.user_b))
+      .forEach(f => push({ uid: f.requested_by, title: `👋 ${user(f.requested_by).display_name}`, body: 'möchte mit dir befreundet sein', onclick: () => { S.openDuel = null; S.tab = 'friends'; render(); } }));
+    data.filter(f => f.status === 'accepted' && f.requested_by === S.me.id && old.some(o => o.user_a === f.user_a && o.user_b === f.user_b && o.status === 'pending'))
+      .forEach(f => { const o = f.user_a === S.me.id ? f.user_b : f.user_a; push({ uid: o, title: `🤝 ${user(o).display_name}`, body: 'hat deine Freundschaftsanfrage angenommen', onclick: () => openChat(o) }); });
+  }
+  S.friends = data; friendsInit = true;
+}
+async function loadLb() { const { data } = await sb.rpc('leaderboard'); if (data) S.lb = data; }
+const myPoints = () => (S.lb || []).find(x => x.user_id === S.me.id)?.points || 0;
+function push({ uid, title, body, onclick }) {
+  let box = $('#pushes'); if (!box) { box = document.createElement('div'); box.id = 'pushes'; box.className = 'pushes'; document.body.appendChild(box); }
+  const el = document.createElement('div'); el.className = 'push';
+  el.innerHTML = `${uid ? av(uid) : ''}<div style="flex:1;min-width:0"><div class="row" style="gap:6px;flex-wrap:nowrap"><b>${esc(title)}</b><span class="pa">jetzt</span></div><div class="pb">${esc(body)}</div></div>`;
+  const close = () => { el.classList.add('out'); setTimeout(() => el.remove(), 300); };
+  el.onclick = () => { close(); onclick && onclick(); };
+  box.prepend(el); while (box.children.length > 4) box.lastChild.remove();
+  setTimeout(close, 7000);
+}
+function turnInfo(d) {
+  const me = myRow(d.id); const st = d.state || {};
+  if (!me || d.status !== 'open') return { mine: false };
+  if (me.status === 'invited') return { mine: false, label: 'Einladung' };
+  if (me.status !== 'playing') return { mine: false, label: 'Warte auf andere' };
+  if (d.game === 'werbinich') {
+    if (st.phase === 'lobby') return d.created_by === S.me.id ? { mine: true, label: 'Spiel starten' } : { mine: false, label: 'Warte auf Start' };
+    if (st.qid && st.turn !== S.me.id) return { mine: true, label: `Abstimmen: ${user(st.turn).display_name} fragt` };
+    return st.turn === S.me.id ? { mine: true, label: 'Du bist dran – stell eine Frage' } : { mine: false, label: `${user(st.turn).display_name} ist dran` };
+  }
+  if (d.game === 'schiffe') {
+    if (st.phase === 'place') return (st.ready || []).includes(S.me.id) ? { mine: false, label: 'Warte auf Gegner' } : { mine: true, label: 'Schiffe platzieren' };
+    return st.turn === S.me.id ? { mine: true, label: 'Du bist dran – schieß!' } : { mine: false, label: `${user(st.turn).display_name} ist dran` };
+  }
+  return { mine: true, label: 'Du bist dran' };
 }
 const unreadFrom = id => S.msgs.filter(m => m.to_id === S.me.id && m.from_id === id && !m.read_at).length;
 const unreadTotal = () => S.msgs.filter(m => m.to_id === S.me.id && !m.read_at).length;
 const playersOf = id => S.players.filter(p => p.duel_id === id);
 const myRow = id => S.players.find(p => p.duel_id === id && p.user_id === S.me.id);
 const myInvites = () => S.duels.filter(d => d.status === 'open' && myRow(d.id)?.status === 'invited');
-const myTurn = () => S.duels.filter(d => d.status === 'open' && myRow(d.id)?.status === 'playing');
+const myTurn = () => S.duels.filter(d => d.status === 'open' && myRow(d.id)?.status === 'playing' && turnInfo(d).mine);
 function notify(title, body) { try { if ('Notification' in window && Notification.permission === 'granted' && document.hidden) new Notification(title, { body }); } catch (e) { } }
 
 async function loadWordList() {
@@ -237,6 +343,10 @@ function startLive() {
     .on('postgres_changes', { event: '*', schema: 'public', table: 'duel_players' }, scheduleRefresh)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'duels' }, scheduleRefresh)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, scheduleRefresh)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'friendships' }, scheduleRefresh)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'wbi_questions' }, scheduleRefresh)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'wbi_votes' }, scheduleRefresh)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'bs_shots' }, scheduleRefresh)
     .subscribe();
   clearInterval(pollT); pollT = setInterval(() => { if (!document.hidden) refresh(); }, 6000);
 }
@@ -283,15 +393,16 @@ function shell(content) {
     <div class="logo"><i>W</i><span>Wort-Duell</span></div>
     <span class="spacer"></span>
     <nav class="tabs">
-      <button class="tab ${S.tab === 'duels' ? 'on' : ''}" data-tab="duels">Duelle${badge ? `<span class="dot">${badge}</span>` : ''}</button>
-      <button class="tab ${S.tab === 'new' ? 'on' : ''}" data-tab="new">Neues Duell</button>
-      <button class="tab ${S.tab === 'chat' ? 'on' : ''}" data-tab="chat">Nachrichten${unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : ''}</button>
-      <button class="tab ${S.tab === 'rank' ? 'on' : ''}" data-tab="rank">Rangliste</button>
-      ${S.profile?.is_admin ? `<button class="tab ${S.tab === 'admin' ? 'on' : ''}" data-tab="admin">Admin</button>` : ''}
+      <button class="tab ${S.tab === 'duels' ? 'on' : ''}" data-tab="duels"><span class="l">Duelle</span><span class="s">⚔️</span>${badge ? `<span class="dot">${badge}</span>` : ''}</button>
+      <button class="tab ${S.tab === 'new' ? 'on' : ''}" data-tab="new"><span class="l">Neues Duell</span><span class="s">＋</span></button>
+      <button class="tab ${S.tab === 'friends' ? 'on' : ''}" data-tab="friends"><span class="l">Freunde</span><span class="s">👥</span>${incomingReq().length ? `<span class="dot">${incomingReq().length}</span>` : ''}</button>
+      <button class="tab ${S.tab === 'chat' ? 'on' : ''}" data-tab="chat"><span class="l">Nachrichten</span><span class="s">💬</span>${unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : ''}</button>
+      <button class="tab ${S.tab === 'rank' ? 'on' : ''}" data-tab="rank"><span class="l">Rangliste</span><span class="s">🏆</span></button>
+      ${S.profile?.is_admin ? `<button class="tab ${S.tab === 'admin' ? 'on' : ''}" data-tab="admin"><span class="l">Admin</span><span class="s">🛠</span></button>` : ''}
     </nav>
     <button class="iconbtn" id="help" title="Hilfe">?</button>
     <div class="me"><button class="iconbtn" id="mebtn" style="background:${colorFor(S.me.id)};color:#fff">${esc((S.profile?.display_name || '?')[0].toUpperCase())}</button>
-      ${S.menu ? `<div class="menu"><div class="who"><b style="color:var(--ink)">${esc(S.profile?.display_name)}</b><br>@${esc(S.profile?.username)}${S.profile?.is_admin ? ' · Admin' : ''}</div>
+      ${S.menu ? `<div class="menu"><div class="who"><b style="color:var(--ink)">${esc(S.profile?.display_name)}</b><br>@${esc(S.profile?.username)}${S.profile?.is_admin ? ' · Admin' : ''}<div style="margin-top:6px">${rankBadge(myPoints())} <span style="font-size:12px">${myPoints()} Punkte</span></div></div>
         <button id="m-pw">🔑 Passwort ändern</button>${'Notification' in window && Notification.permission !== 'granted' ? '<button id="m-not">🔔 Benachrichtigungen an</button>' : ''}<button id="m-out">↩︎ Abmelden</button></div>` : ''}
     </div>
   </div></header>
@@ -302,8 +413,9 @@ function render(soft) {
   if (!S.me) return;
   if (S.openDuel) return renderDuel(soft);
   if (soft && S.tab === 'chat' && $('#clist')) { updateChat(); return; }
+  if (soft && S.tab === 'friends' && document.activeElement?.id === 'fsearch') return;
   if (soft && document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return; // beim Tippen nicht stören
-  const views = { duels: viewDuels, new: viewNew, rank: viewRank, admin: viewAdmin, chat: viewChat };
+  const views = { duels: viewDuels, new: viewNew, rank: viewRank, admin: viewAdmin, chat: viewChat, friends: viewFriends };
   const v = (views[S.tab] || viewDuels)();
   $('#app').innerHTML = shell(v.html);
   bindShell(); v.bind && v.bind();
@@ -327,11 +439,10 @@ function duelCard(d) {
   let tag = '';
   if (d.status === 'finished') tag = d.winner_id ? (d.winner_id === S.me.id ? '<span class="pill grn">🏆 Gewonnen</span>' : `<span class="pill">Sieg: ${esc(user(d.winner_id).display_name)}</span>`) : '<span class="pill">Kein Sieger</span>';
   else if (me?.status === 'invited') tag = '<span class="pill yel">Einladung</span>';
-  else if (me?.status === 'playing') tag = '<span class="pill blu">Du bist dran</span>';
-  else tag = '<span class="pill">Warte auf andere</span>';
+  else { const ti = turnInfo(d); tag = `<span class="pill ${ti.mine ? 'blu' : ''}">${esc(ti.label || 'Warte auf andere')}</span>`; }
   return `<div class="card dcard" data-open="${d.id}">
     <div class="dhead"><div class="gico ${g.cls}">${g.ico}</div><div style="flex:1;min-width:0"><b>${g.name}${d.word_length ? ` · ${d.word_length} Buchstaben` : ''}</b><div class="sub" style="margin:0;font-size:13px">von ${esc(user(d.created_by).display_name)} · ${fmtDate(d.created_at)}</div></div>${tag}</div>
-    <div class="plist">${ps.map(p => `<div class="prow">${av(p.user_id)}<span class="n">${esc(user(p.user_id).display_name)}${p.user_id === S.me.id ? ' (du)' : ''}</span><span class="pill ${STATUS[p.status][1]}">${STATUS[p.status][0]}</span><b style="width:64px;text-align:right;font-variant-numeric:tabular-nums">${p.attempts} ${d.game === 'wordless' ? '/ 6' : 'Vers.'}</b></div>`).join('')}</div>
+    <div class="plist">${ps.map(p => `<div class="prow">${av(p.user_id)}<span class="n">${esc(user(p.user_id).display_name)}${p.user_id === S.me.id ? ' (du)' : ''}</span><span class="pill ${STATUS[p.status][1]}">${STATUS[p.status][0]}</span><b style="width:76px;text-align:right;font-variant-numeric:tabular-nums">${p.attempts} ${d.game === 'wordless' ? '/ 6' : GAME[d.game].unit}</b></div>`).join('')}</div>
     ${me?.status === 'invited' ? `<div class="row" style="margin-top:14px"><button class="btn sm" data-acc="${d.id}">Annehmen &amp; spielen</button><button class="btn sm sec" data-dec="${d.id}">Ablehnen</button></div>` : ''}
   </div>`;
 }
@@ -344,7 +455,7 @@ function viewDuels() {
     html: `<div class="h1">Hallo ${esc(S.profile.display_name.split(' ')[0])} 👋</div><div class="sub">Deine Duelle – alles aktualisiert sich live.</div>
       <div class="row"><button class="btn" id="go-new">＋ Neues Duell</button></div>
       ${inv.length ? sec('Einladungen', inv, '') : ''}
-      ${sec('Du bist dran', turn, 'Gerade nichts zu spielen. Fordere jemanden heraus!')}
+      ${sec('Du bist dran', turn, 'Gerade nichts zu tun. Fordere jemanden heraus!')}
       ${waiting.length ? sec('Warte auf andere', waiting, '') : ''}
       ${sec('Beendet', done, 'Noch keine beendeten Duelle.')}`,
     bind() {
@@ -358,14 +469,16 @@ function viewDuels() {
 
 // ---------- Neues Duell ----------
 function viewNew() {
-  const N = S.newDuel; const others = S.users.filter(u => u.id !== S.me.id);
+  const N = S.newDuel; const others = myFriends(); [...N.opp].forEach(id => { if (!isFriend(id)) N.opp.delete(id); });
+  const hint = N.game === 'schiffe' ? (N.opp.size !== 1 ? 'Schiffe versenken: genau eine Person einladen.' : '') : N.game === 'werbinich' ? (N.opp.size < 1 ? 'Wer bin ich?: mindestens eine Person einladen.' : '') : '';
+  const rule = N.game === 'werbinich' ? 'Gewonnen hat, wer zuerst errät, wer er ist.' : N.game === 'schiffe' ? 'Gewonnen hat, wer zuerst alle gegnerischen Schiffe versenkt.' : 'Gewonnen hat, wer mit den wenigsten Versuchen löst. Bei Gleichstand zählt, wer schneller war.';
   return {
-    html: `<div class="h1">Neues Duell</div><div class="sub">Spiel wählen, Gegner einladen, los geht's. Alle bekommen dasselbe geheime Wort.</div>
+    html: `<div class="h1">Neues Duell</div><div class="sub">Spiel wählen, Freunde einladen, los geht's.</div>
     <div class="grid g2">${Object.entries(GAME).map(([k, g]) => `<button class="choice ${N.game === k ? 'on' : ''}" data-game="${k}"><div class="gico ${g.cls}">${g.ico}</div><b>${g.name}</b><small>${g.desc}</small></button>`).join('')}</div>
     ${N.game === 'wordless' ? `<div class="sec-t">Wortlänge</div><div class="lens">${[3, 4, 5, 6, 7, 8].map(n => `<button data-len="${n}" class="${N.len === n ? 'on' : ''}">${n}</button>`).join('')}</div>` : ''}
-    <div class="sec-t">Gegner einladen (${N.opp.size})</div>
-    ${others.length ? `<div class="ulist">${others.map(u => `<div class="uchk ${N.opp.has(u.id) ? 'on' : ''}" data-opp="${u.id}">${av(u.id)}<span style="flex:1">${esc(u.display_name)}</span>${N.opp.has(u.id) ? '✓' : ''}</div>`).join('')}</div>` : '<div class="empty">Noch keine anderen Spieler. ' + (S.profile.is_admin ? 'Leg im Admin-Bereich Accounts an.' : 'Frag Luca nach Accounts für deine Freunde.') + '</div>'}
-    <div class="row" style="margin-top:22px"><button class="btn" id="start">${N.opp.size ? `Duell starten (${N.opp.size + 1} Spieler)` : 'Allein üben'}</button><span class="mut" style="color:var(--mut);font-size:13px">Gewonnen hat, wer mit den wenigsten Versuchen löst. Bei Gleichstand zählt, wer schneller war.</span></div>`,
+    <div class="sec-t">Freunde einladen (${N.opp.size})</div>
+    ${others.length ? `<div class="ulist">${others.map(u => `<div class="uchk ${N.opp.has(u.id) ? 'on' : ''}" data-opp="${u.id}">${av(u.id)}<span style="flex:1">${esc(u.display_name)}</span>${N.opp.has(u.id) ? '✓' : ''}</div>`).join('')}</div>` : '<div class="empty">Du hast noch keine Freunde hier. Füge im Tab <b>Freunde</b> Leute hinzu – erst dann kannst du sie einladen.</div>'}
+    <div class="row" style="margin-top:22px"><button class="btn" id="start" ${hint ? 'disabled' : ''}>${N.opp.size ? `Duell starten (${N.opp.size + 1} Spieler)` : 'Allein üben'}</button><span style="color:${hint ? 'var(--red)' : 'var(--mut)'};font-size:13px">${hint || rule}</span></div>`,
     bind() {
       document.querySelectorAll('[data-game]').forEach(b => b.onclick = () => { N.game = b.dataset.game; render(); });
       document.querySelectorAll('[data-len]').forEach(b => b.onclick = () => { N.len = +b.dataset.len; render(); });
@@ -384,14 +497,18 @@ function viewNew() {
 // ---------- Rangliste ----------
 function viewRank() {
   return {
-    html: `<div class="h1">Rangliste</div><div class="sub">Siege aus Duellen mit mindestens zwei Spielern. Übungsrunden zählen nicht.</div><div id="rk"><div class="empty">Lade …</div></div>`,
+    html: `<div class="h1">Rangliste</div><div class="sub">Punkte aus Duellen mit mindestens zwei Spielern: <b>+20</b> pro Sieg (+5 für jeden weiteren Gegner), <b>+2</b> fürs Mitspielen. Übungsrunden zählen nicht.</div><div id="rk"><div class="empty">Lade …</div></div>`,
     async bind() {
       const { data, error } = await sb.rpc('leaderboard'); if (error) return toast(errMsg(error), 1);
-      const L = data || []; const medals = ['🥇', '🥈', '🥉'];
-      const top = L.filter(x => x.wins > 0).slice(0, 3);
-      const pod = top.length ? `<div class="podium">${[1, 0, 2].map(i => top[i] ? `<div class="pod ${i === 0 ? 'p1' : ''}"><div class="m">${medals[i]}</div>${av(top[i].user_id).replace('class="av"', 'class="av" style="margin:6px auto 0;width:40px;height:40px;font-size:17px;background:' + colorFor(top[i].user_id) + '"')}<div class="nm">${esc(top[i].display_name)}</div><div class="w">${top[i].wins} ${top[i].wins === 1 ? 'Sieg' : 'Siege'}</div></div>` : '<div></div>').join('')}</div>` : '';
-      $('#rk').innerHTML = pod + `<div class="card" style="padding:8px 16px"><table><thead><tr><th>#</th><th>Spieler</th><th class="num">Siege</th><th class="num">Duelle</th><th class="num">Quote</th><th class="num">Wordless</th><th class="num">Clueless</th></tr></thead><tbody>
-        ${L.map((x, i) => `<tr${x.user_id === S.me.id ? ' style="font-weight:700"' : ''}><td>${i + 1}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap">${av(x.user_id)}${esc(x.display_name)}</div></td><td class="num"><b>${x.wins}</b></td><td class="num">${x.played}</td><td class="num">${x.played ? Math.round(x.wins / x.played * 100) + ' %' : '–'}</td><td class="num">${x.wins_wordless}</td><td class="num">${x.wins_clueless}</td></tr>`).join('')}
+      const L = data || []; const medals = ['🥇', '🥈', '🥉']; S.lb = L;
+      const mp = myPoints(), mr = rankOf(mp), nr = nextRank(mp);
+      const rc = `<div class="card rankcard"><div class="ri">${mr.ico}</div><div style="flex:1"><div style="color:var(--mut);font-size:13px">Dein Rang</div><div style="font-size:24px;font-weight:800;color:${mr.c}">${mr.name} · ${mp} Punkte</div>
+        ${nr ? `<div class="prog"><div style="width:${Math.round((mp - mr.min) / (nr.min - mr.min) * 100)}%;background:${nr.c}"></div></div><div style="color:var(--mut);font-size:13px;margin-top:6px">Noch ${nr.min - mp} Punkte bis ${nr.ico} ${nr.name}</div>` : '<div style="color:var(--mut);font-size:13px;margin-top:6px">Höchster Rang erreicht 🔥</div>'}
+        <div class="ranks">${RANKS.map(r => `<span class="rankb" style="background:${r.c};opacity:${mp >= r.min ? 1 : .35}" title="ab ${r.min} Punkten">${r.ico} ${r.name} <small style="font-weight:500">${r.min}</small></span>`).join('')}</div></div></div>`;
+      const top = L.filter(x => x.points > 0).slice(0, 3);
+      const pod = top.length ? `<div class="podium">${[1, 0, 2].map(i => top[i] ? `<div class="pod ${i === 0 ? 'p1' : ''}"><div class="m">${medals[i]}</div>${av(top[i].user_id).replace('class="av"', 'class="av" style="margin:6px auto 0;width:40px;height:40px;font-size:17px;background:' + colorFor(top[i].user_id) + '"')}<div class="nm">${esc(top[i].display_name)}</div><div class="w">${top[i].points} Punkte · ${top[i].wins} ${top[i].wins === 1 ? 'Sieg' : 'Siege'}</div></div>` : '<div></div>').join('')}</div>` : '';
+      $('#rk').innerHTML = rc + pod + `<div class="card" style="padding:8px 16px;overflow-x:auto"><table><thead><tr><th>#</th><th>Spieler</th><th>Rang</th><th class="num">Punkte</th><th class="num">Siege</th><th class="num">Duelle</th><th class="num">Quote</th><th class="num" title="Wordless">W</th><th class="num" title="Clueless">?</th><th class="num" title="Wer bin ich?">🎭</th><th class="num" title="Schiffe versenken">🚢</th></tr></thead><tbody>
+        ${L.map((x, i) => `<tr${x.user_id === S.me.id ? ' style="font-weight:700"' : ''}><td>${i + 1}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap">${av(x.user_id)}${esc(x.display_name)}</div></td><td>${rankBadge(x.points)}</td><td class="num"><b>${x.points}</b></td><td class="num">${x.wins}</td><td class="num">${x.played}</td><td class="num">${x.played ? Math.round(x.wins / x.played * 100) + ' %' : '–'}</td><td class="num">${x.wins_wordless}</td><td class="num">${x.wins_clueless}</td><td class="num">${x.wins_werbinich}</td><td class="num">${x.wins_schiffe}</td></tr>`).join('')}
       </tbody></table></div>`;
     }
   };
@@ -408,6 +525,7 @@ function viewAdmin() {
         <label class="l">Benutzername (zum Einloggen)</label><input class="inp" id="nu" placeholder="z. B. max" autocapitalize="none" required>
         <label class="l">Passwort</label><div class="row" style="flex-wrap:nowrap"><input class="inp" id="np" value="${genPw()}" required><button type="button" class="btn sec sm" id="rg" title="Neues Passwort">↻</button></div>
         <label class="row" style="margin-top:12px;gap:8px;font-size:14px"><input type="checkbox" id="na"> Admin-Rechte (darf Accounts verwalten)</label>
+        <p style="color:var(--mut);font-size:12px;margin:8px 0 0">Du bist automatisch mit neuen Accounts befreundet. Untereinander müssen sich neue Spieler im Tab „Freunde“ hinzufügen.</p>
         <button class="btn" style="margin-top:16px;width:100%">Account anlegen</button>
       </form>
       <div class="card"><h3 style="margin-bottom:4px">Wortdaten</h3><p class="mut" style="color:var(--mut);font-size:14px;margin:4px 0 12px">Einmalig nötig: lädt ca. 40.000 Wörter für Clueless und die Lösungswörter für Wordless in die Datenbank.</p><div id="ds">Prüfe …</div></div>
@@ -473,24 +591,40 @@ function showInvite(name, un, pw, isNew) {
 async function openDuel(id) {
   S.openDuel = id; S.menu = false; S.draft = ''; history.replaceState(null, '', '#duell=' + id);
   if (!S.duels.find(d => d.id === id)) await loadAll();
-  const { data } = await sb.from('guesses').select('n,guess,result').eq('duel_id', id).order('n');
-  S.myGuesses = data || []; S.secret = null;
-  await loadWordList();
+  S.secret = null; S.wbi = null; S.bs = null; S.bsDraft = null;
+  await Promise.all([loadGameData(id), loadWordList()]);
   renderDuel();
+}
+async function loadGameData(id) {
+  const d = S.duels.find(x => x.id === id); if (!d) return;
+  if (d.game === 'wordless' || d.game === 'clueless') {
+    const { data } = await sb.from('guesses').select('n,guess,result').eq('duel_id', id).order('n'); S.myGuesses = data || [];
+  } else if (d.game === 'werbinich') {
+    const [n, q] = await Promise.all([sb.from('wbi_names').select('*').eq('duel_id', id), sb.from('wbi_questions').select('*').eq('duel_id', id).order('id')]);
+    const qids = (q.data || []).map(x => x.id);
+    const v = qids.length ? await sb.from('wbi_votes').select('*').in('question_id', qids.slice(-50)) : { data: [] };
+    S.wbi = { names: n.data || [], qs: q.data || [], votes: v.data || [] };
+  } else if (d.game === 'schiffe') {
+    const [b, s] = await Promise.all([sb.from('bs_boards').select('*').eq('duel_id', id), sb.from('bs_shots').select('*').eq('duel_id', id).order('id')]);
+    S.bs = { boards: b.data || [], shots: s.data || [] };
+  }
 }
 function closeDuel() { S.openDuel = null; history.replaceState(null, '', location.pathname); S.tab = 'duels'; render(); }
 function renderDuel(soft) {
   const d = S.duels.find(x => x.id === S.openDuel);
   if (!d) { $('#app').innerHTML = shell('<div class="empty">Duell nicht gefunden.</div>'); bindShell(); return; }
   if (soft && d.game === 'clueless' && document.activeElement?.id === 'cg') { updateSide(d); return; }
+  if (soft && d.game === 'werbinich' && ['wq', 'wg'].includes(document.activeElement?.id)) { updateSide(d); return; }
   const me = myRow(d.id); const g = GAME[d.game];
   let top = '';
   if (d.status === 'finished') {
     if (!S.secret) sb.rpc('duel_secret', { p_duel: d.id }).then(r => { if (r.data) { S.secret = r.data; renderDuel(); } });
-    top = `<div class="banner ${d.winner_id === S.me.id ? 'win' : 'info'}">${d.winner_id ? (d.winner_id === S.me.id ? '🏆 Du hast gewonnen!' : `🏆 ${esc(user(d.winner_id).display_name)} hat gewonnen.`) : 'Niemand hat das Wort gelöst.'} ${S.secret ? `Das Wort war <b>${esc(S.secret.toUpperCase())}</b>.` : ''}</div>`;
+    const word = ['wordless', 'clueless'].includes(d.game);
+    top = `<div class="banner ${d.winner_id === S.me.id ? 'win' : 'info'}">${d.winner_id ? (d.winner_id === S.me.id ? '🏆 Du hast gewonnen!' : `🏆 ${esc(user(d.winner_id).display_name)} hat gewonnen.`) : (word ? 'Niemand hat das Wort gelöst.' : 'Kein Sieger.')} ${word && S.secret ? `Das Wort war <b>${esc(S.secret.toUpperCase())}</b>.` : ''}</div>`;
   } else if (me?.status === 'invited') top = `<div class="banner info">Du wurdest zu diesem Duell eingeladen. <button class="btn sm" id="acc" style="margin-left:8px">Annehmen &amp; spielen</button> <button class="btn sec sm" id="dec">Ablehnen</button></div>`;
-  else if (me && me.status !== 'playing') top = `<div class="banner info">${me.status === 'solved' ? `✓ Gelöst mit ${me.attempts} Versuchen! ` : ''}Warte, bis alle fertig sind – dann siehst du den Sieger und das Wort.</div>`;
-  const body = d.game === 'wordless' ? wordlessHtml(d, me) : cluelessHtml(d, me);
+  else if (me && me.status !== 'playing' && ['wordless', 'clueless'].includes(d.game)) top = `<div class="banner info">${me.status === 'solved' ? `✓ Gelöst mit ${me.attempts} Versuchen! ` : ''}Warte, bis alle fertig sind – dann siehst du den Sieger und das Wort.</div>`;
+  else if (me && me.status === 'solved' && d.game === 'werbinich') top = `<div class="banner win">✓ Du hast es erraten! Stimm weiter mit ab, bis alle fertig sind.</div>`;
+  const body = { wordless: wordlessHtml, clueless: cluelessHtml, werbinich: wbiHtml, schiffe: bsHtml }[d.game](d, me);
   $('#app').innerHTML = shell(`<div class="row" style="margin-bottom:14px"><button class="btn sec sm" id="back">← Zurück</button><div class="gico ${g.cls}" style="width:34px;height:34px;font-size:16px;border-radius:10px">${g.ico}</div><b style="font-size:20px">${g.name}${d.word_length ? ` · ${d.word_length} Buchstaben` : ''}</b><span class="spacer"></span>
     ${d.status === 'open' && me?.status === 'playing' ? '<button class="btn red sm" id="giveup">Aufgeben</button>' : ''}
     ${d.status === 'open' && (d.created_by === S.me.id || S.profile.is_admin) ? '<button class="btn sec sm" id="endd">Duell beenden</button>' : ''}</div>
@@ -501,15 +635,16 @@ function renderDuel(soft) {
   const dc = $('#dec'); if (dc) dc.onclick = async () => { await sb.rpc('respond_invite', { p_duel: d.id, p_accept: false }); closeDuel(); refresh(); };
   const gu = $('#giveup'); if (gu) gu.onclick = async () => { if (!await confirmBox('Wirklich aufgeben? Dann kannst du dieses Duell nicht mehr gewinnen.')) return; const { error } = await sb.rpc('give_up', { p_duel: d.id }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); };
   const en = $('#endd'); if (en) en.onclick = async () => { if (!await confirmBox('Duell jetzt beenden? Wer noch spielt, gilt als ausgeschieden; offene Einladungen verfallen.')) return; const { error } = await sb.rpc('end_duel', { p_duel: d.id }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); };
-  if (d.game === 'wordless') bindWordless(d, me); else bindClueless(d, me);
+  if (keyHandler) { document.removeEventListener('keydown', keyHandler); keyHandler = null; }
+  ({ wordless: bindWordless, clueless: bindClueless, werbinich: bindWbi, schiffe: bindBs })[d.game](d, me);
 }
 function updateSide(d) {
   const el = $('#side'); if (!el) return;
   setTimeout(() => el.querySelectorAll('[data-msg]').forEach(b => b.onclick = () => openChat(b.dataset.msg)), 0);
-  const ps = playersOf(d.id).filter(p => p.status !== 'declined').sort((a, b) => (a.status === 'solved' ? 0 : 1) - (b.status === 'solved' ? 0 : 1) || a.attempts - b.attempts);
+  const ps = playersOf(d.id).filter(p => p.status !== 'declined').sort((a, b) => d.game === 'werbinich' ? ((a.status === 'solved' ? 0 : 1) - (b.status === 'solved' ? 0 : 1) || new Date(a.finished_at || 0) - new Date(b.finished_at || 0)) : ((a.status === 'solved' ? 0 : 1) - (b.status === 'solved' ? 0 : 1) || a.attempts - b.attempts));
   el.innerHTML = `<div class="row" style="margin-bottom:6px"><b>Live-Stand</b><span class="spacer"></span>${d.status === 'open' ? '<span class="pill grn">● live</span>' : '<span class="pill">beendet</span>'}</div>
-    <p style="color:var(--mut);font-size:12px;margin:0 0 6px">Du siehst nur, wie viele Versuche die anderen haben – nicht, was sie eingeben.</p>
-    ${ps.map(p => `<div class="lrow">${av(p.user_id)}<div style="flex:1;min-width:0"><b>${esc(user(p.user_id).display_name)}${p.user_id === S.me.id ? ' (du)' : ''}</b> ${d.winner_id === p.user_id ? '🏆' : ''}${p.user_id !== S.me.id ? ` <button class="btn sec sm" style="padding:2px 7px" data-msg="${p.user_id}" title="Nachricht schreiben">💬</button>` : ''}<div class="meta"><span class="pill ${STATUS[p.status][1]}" style="font-size:11px">${STATUS[p.status][0]}</span>${d.game === 'clueless' && p.best_rank ? ` · bester Rang ${p.best_rank.toLocaleString('de-AT')}` : ''}</div></div><div style="text-align:right"><div class="big">${p.attempts}</div><div class="meta">${d.game === 'wordless' ? 'von 6' : 'Versuche'}</div></div></div>`).join('')}
+    <p style="color:var(--mut);font-size:12px;margin:0 0 6px">${d.game === 'werbinich' ? 'Fragen = gestellte Fragen + Rateversuche.' : d.game === 'schiffe' ? 'Abgegebene Schüsse je Spieler.' : 'Du siehst nur, wie viele Versuche die anderen haben – nicht, was sie eingeben.'}</p>
+    ${ps.map(p => `<div class="lrow">${av(p.user_id)}<div style="flex:1;min-width:0"><b>${esc(user(p.user_id).display_name)}${p.user_id === S.me.id ? ' (du)' : ''}</b> ${d.winner_id === p.user_id ? '🏆' : ''}${p.user_id !== S.me.id && isFriend(p.user_id) ? ` <button class="btn sec sm" style="padding:2px 7px" data-msg="${p.user_id}" title="Nachricht schreiben">💬</button>` : ''}${d.game === 'werbinich' && d.state?.turn === p.user_id && d.status === 'open' ? ' <span class="pill blu" style="font-size:11px">am Zug</span>' : ''}${d.game === 'schiffe' && d.state?.turn === p.user_id && d.status === 'open' && d.state?.phase === 'play' ? ' <span class="pill blu" style="font-size:11px">am Zug</span>' : ''}<div class="meta"><span class="pill ${STATUS[p.status][1]}" style="font-size:11px">${STATUS[p.status][0]}</span>${d.game === 'clueless' && p.best_rank ? ` · bester Rang ${p.best_rank.toLocaleString('de-AT')}` : ''}</div></div><div style="text-align:right"><div class="big">${p.attempts}</div><div class="meta">${d.game === 'wordless' ? 'von 6' : GAME[d.game].unit}</div></div></div>`).join('')}
     ${''}${playersOf(d.id).some(p => p.status === 'declined') ? `<p style="color:var(--mut);font-size:12px;margin:8px 0 0">Abgelehnt: ${playersOf(d.id).filter(p => p.status === 'declined').map(p => esc(user(p.user_id).display_name)).join(', ')}</p>` : ''}`;
 }
 
@@ -596,10 +731,158 @@ function bindClueless(d, me) {
   };
 }
 
+// ----- Wer bin ich? -----
+function wbiHtml(d, me) {
+  const st = d.state || {}; const W = S.wbi || { names: [], qs: [], votes: [] };
+  const ps = playersOf(d.id).filter(p => p.status !== 'declined');
+  if (st.phase === 'lobby') {
+    const acc = ps.filter(p => p.status === 'playing').length;
+    return `<h3 style="margin-bottom:6px">🎭 Warteraum</h3><p style="color:var(--mut);margin:0 0 14px">Sobald alle angenommen haben, startet ${esc(user(d.created_by).display_name)} das Spiel. Dann bekommt jeder eine berühmte Person oder Figur – deine eigene siehst du nicht, die der anderen schon.</p>
+      <div class="plist">${ps.map(p => `<div class="prow">${av(p.user_id)}<span class="n">${esc(user(p.user_id).display_name)}</span><span class="pill ${STATUS[p.status][1]}">${p.status === 'playing' ? 'Bereit' : STATUS[p.status][0]}</span></div>`).join('')}</div>
+      ${d.created_by === S.me.id && d.status === 'open' ? `<div class="row" style="margin-top:18px"><button class="btn" id="wstart" ${acc < 2 ? 'disabled' : ''}>Spiel starten (${acc} Spieler)</button><span style="color:var(--mut);font-size:13px">Wer bis dahin nicht angenommen hat, ist nicht dabei.</span></div>` : ''}`;
+  }
+  const order = st.order || [];
+  const nameOf = u => W.names.find(n => n.user_id === u)?.name;
+  const cards = order.map(u => { const p = ps.find(x => x.user_id === u); const self = u === S.me.id; const nm = nameOf(u);
+    return `<div class="wcard ${st.turn === u && d.status === 'open' ? 'turn' : ''} ${self ? 'me' : ''}">${av(u)}<div style="font-size:12px;color:var(--mut);margin-top:4px">${esc(user(u).display_name)}${self ? ' (du)' : ''}</div><div class="wn">${self && !nm ? '❓' : esc(nm || '…')}</div>${p?.status === 'solved' ? '<div class="pill grn" style="margin-top:6px">✓ erraten</div>' : p && p.status !== 'playing' ? `<div class="pill red" style="margin-top:6px">${STATUS[p.status][0]}</div>` : ''}</div>`; }).join('');
+  const openQ = st.qid ? W.qs.find(q => q.id === +st.qid) : null;
+  let action = '';
+  if (d.status === 'open') {
+    if (openQ) {
+      const myVote = W.votes.find(v => v.question_id === openQ.id && v.voter === S.me.id);
+      const voters = ps.filter(p => p.user_id !== openQ.asker && ['playing', 'solved'].includes(p.status)).length;
+      const nv = W.votes.filter(v => v.question_id === openQ.id).length;
+      action = `<div class="qbox"><div style="color:var(--mut);font-size:13px">${openQ.asker === S.me.id ? 'Deine Frage' : esc(user(openQ.asker).display_name) + ' fragt'} · ${nv}/${voters} abgestimmt</div><div class="qt">„${esc(openQ.text)}“</div>
+        ${openQ.asker !== S.me.id && me && ['playing', 'solved'].includes(me.status) ? `<div style="color:var(--mut);font-size:13px">Gesucht: <b style="color:var(--ink)">${esc(nameOf(openQ.asker) || '?')}</b></div><div class="vote"><button class="btn grn" data-vote="1">${myVote?.vote === true ? '✓ ' : ''}RICHTIG</button><button class="btn" style="background:var(--red)" data-vote="0">${myVote?.vote === false ? '✓ ' : ''}FALSCH</button></div>${myVote ? '<p style="color:var(--mut);font-size:12px;margin:8px 0 0;text-align:center">Du kannst deine Stimme noch ändern, bis die Mehrheit steht.</p>' : ''}` : '<p style="margin:6px 0 0;color:var(--mut)">Warte auf die Abstimmung der anderen …</p>'}</div>`;
+    } else if (st.turn === S.me.id && me?.status === 'playing') {
+      action = `<div class="qbox"><div class="qt">Du bist dran! 🎯</div><p style="color:var(--mut);margin:0 0 12px">Stell eine Ja/Nein-Frage über dich – oder rate, wer du bist.</p>
+        <form id="wqf" class="row" style="flex-wrap:nowrap"><input class="inp" id="wq" placeholder="z. B. Bin ich ein Mensch?" maxlength="300" autocomplete="off"><button class="btn">Fragen</button></form>
+        <form id="wgf" class="row" style="flex-wrap:nowrap;margin-top:8px"><input class="inp" id="wg" placeholder="Ich bin … (Name raten)" maxlength="120" autocomplete="off"><button class="btn sec">Lösen</button></form></div>`;
+    } else if (st.turn) action = `<div class="qbox" style="background:var(--soft);border-color:var(--line)"><b>${esc(user(st.turn).display_name)}</b> ist dran und überlegt sich eine Frage …</div>`;
+  }
+  const log = [...W.qs].reverse().map(q => `<div class="wli">${av(q.asker)}<span class="q">${q.kind === 'guess' ? '🎯 <i>Bin ich ' + esc(q.text) + '?</i>' : esc(q.text)}</span>${q.result === 'yes' ? '<span class="pill grn">' + (q.kind === 'guess' ? 'Erraten!' : 'RICHTIG') + '</span>' : q.result === 'no' ? '<span class="pill red">' + (q.kind === 'guess' ? 'Falsch' : 'FALSCH') + '</span>' : '<span class="pill yel">läuft</span>'}${q.kind === 'q' && q.result ? `<span style="font-size:11px;color:var(--mut)">${q.yes}:${q.no}</span>` : ''}</div>`).join('');
+  return `<div class="wcards">${cards}</div>${action}<div class="sec-t" style="margin-top:6px">Verlauf</div><div class="wlog" id="wlog">${log || '<div class="empty">Noch keine Fragen.</div>'}</div>`;
+}
+function bindWbi(d, me) {
+  const s = $('#wstart'); if (s) s.onclick = async () => { s.disabled = true; const { error } = await sb.rpc('wbi_start', { p_duel: d.id }); if (error) { toast(errMsg(error), 1); s.disabled = false; return; } await loadAll(); renderDuel(); };
+  document.querySelectorAll('[data-vote]').forEach(b => b.onclick = async () => { const { error } = await sb.rpc('wbi_vote', { p_duel: d.id, p_vote: b.dataset.vote === '1' }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); });
+  const qf = $('#wqf'); if (qf) qf.onsubmit = async e => { e.preventDefault(); const t = $('#wq').value.trim(); if (!t) return; const { error } = await sb.rpc('wbi_ask', { p_duel: d.id, p_text: t }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); };
+  const gf = $('#wgf'); if (gf) gf.onsubmit = async e => { e.preventDefault(); const t = $('#wg').value.trim(); if (!t) return;
+    const { data, error } = await sb.rpc('wbi_guess', { p_duel: d.id, p_text: t }); if (error) return toast(errMsg(error), 1);
+    if (data.correct) toast(`🎉 Richtig – du bist ${data.name}!`); else toast('Leider falsch – der Nächste ist dran.', 1);
+    await loadAll(); renderDuel(); };
+}
+
+// ----- Schiffe versenken -----
+const FLEET = [5, 4, 3, 3, 2];
+function randomFleet() {
+  for (let tries = 0; tries < 500; tries++) {
+    const occ = new Set(), ships = []; let ok = true;
+    for (const len of FLEET) {
+      let placed = false;
+      for (let t = 0; t < 200 && !placed; t++) {
+        const hor = Math.random() < .5, x = Math.floor(Math.random() * (hor ? 11 - len : 10)), y = Math.floor(Math.random() * (hor ? 10 : 11 - len));
+        const cells = Array.from({ length: len }, (_, i) => hor ? [x + i, y] : [x, y + i]);
+        // Schiffe berühren sich nicht (auch nicht diagonal)
+        if (cells.some(([cx, cy]) => [-1, 0, 1].some(dx => [-1, 0, 1].some(dy => occ.has((cx + dx) + ',' + (cy + dy)))))) continue;
+        cells.forEach(c => occ.add(c.join(','))); ships.push(cells); placed = true;
+      }
+      if (!placed) { ok = false; break; }
+    }
+    if (ok) return ships;
+  }
+}
+function grid(cellFn, clickable) {
+  let h = '<div class="grid10">';
+  for (let y = 0; y < 10; y++) for (let x = 0; x < 10; x++) { const c = cellFn(x, y); h += clickable && c.click ? `<button class="cell ${c.cls}" data-shot="${x},${y}" title="${'ABCDEFGHIJ'[x]}${y + 1}"></button>` : `<div class="cell ${c.cls}"></div>`; }
+  return h + '</div>';
+}
+function bsHtml(d, me) {
+  const st = d.state || {}; const B = S.bs || { boards: [], shots: [] };
+  const opp = playersOf(d.id).find(p => p.user_id !== S.me.id)?.user_id;
+  const myBoard = B.boards.find(b => b.user_id === S.me.id);
+  const legend = '<div class="legend"><span><i style="background:#8e8e93"></i>Schiff</span><span><i style="background:#ff9f0a"></i>Treffer</span><span><i style="background:#ff3b30"></i>Versenkt</span><span><i style="background:var(--soft)"></i>Wasser</span></div>';
+  if (st.phase === 'place' && d.status === 'open') {
+    if (!me || me.status === 'invited') return '<div class="empty">Nimm die Einladung an, um deine Flotte zu platzieren.</div>';
+    const ready = (st.ready || []).includes(S.me.id);
+    if (ready) { const cells = new Set((myBoard?.ships || []).flat().map(c => c.join(','))); return `<div class="bst">⚓ Deine Flotte steht – warte auf ${esc(user(opp).display_name)} …</div>${grid((x, y) => ({ cls: cells.has(x + ',' + y) ? 'ship' : '' }))}${legend}`; }
+    if (!S.bsDraft) S.bsDraft = randomFleet();
+    const cells = new Set(S.bsDraft.flat().map(c => c.join(',')));
+    return `<div class="bst">⚓ Platziere deine Flotte</div><p style="text-align:center;color:var(--mut);margin:0 0 12px;font-size:14px">5er, 4er, zwei 3er und ein 2er. Mische so oft du willst, dann „Bereit“.</p>${grid((x, y) => ({ cls: cells.has(x + ',' + y) ? 'ship' : '' }))}
+      <div class="row" style="justify-content:center;margin-top:14px"><button class="btn sec" id="bshuf">🔀 Neu mischen</button><button class="btn" id="bready">✓ Bereit</button></div>`;
+  }
+  const myShots = B.shots.filter(s => s.shooter === S.me.id), oppShots = B.shots.filter(s => s.shooter !== S.me.id);
+  const sunkSet = arr => new Set(arr.filter(s => s.sunk).flatMap(s => s.sunk.map(c => c.join(','))));
+  const mySunk = sunkSet(myShots), oppSunk = sunkSet(oppShots);
+  const myCells = new Set((myBoard?.ships || []).flat().map(c => c.join(',')));
+  const last = B.shots[B.shots.length - 1];
+  const oppBoard = B.boards.find(b => b.user_id === opp); const oppCells = new Set((oppBoard?.ships || []).flat().map(c => c.join(',')));
+  const myTurnNow = d.status === 'open' && st.turn === S.me.id && me?.status === 'playing';
+  const attack = grid((x, y) => { const k = x + ',' + y; const s = myShots.find(s => s.x === x && s.y === y);
+    let cls = s ? (mySunk.has(k) ? 'sunk' : s.result === 'miss' ? 'miss' : 'hit') : (d.status !== 'open' && oppCells.has(k) ? 'ship' : '');
+    if (last && last.shooter === S.me.id && last.x === x && last.y === y) cls += ' last';
+    return { cls, click: myTurnNow && !s }; }, true);
+  const def = grid((x, y) => { const k = x + ',' + y; const s = oppShots.find(s => s.x === x && s.y === y);
+    let cls = s ? (oppSunk.has(k) ? 'sunk' : s.result === 'miss' ? 'miss' : 'hit') : myCells.has(k) ? 'ship' : '';
+    if (last && last.shooter !== S.me.id && last.x === x && last.y === y) cls += ' last';
+    return { cls }; });
+  const hitsMe = myShots.filter(s => s.result !== 'miss').length, hitsOpp = oppShots.filter(s => s.result !== 'miss').length;
+  const status = d.status !== 'open' ? '' : myTurnNow ? '<div class="banner info" style="text-align:center">🎯 Du bist dran – klick auf ein Feld beim Gegner. Bei Treffer darfst du nochmal!</div>' : `<div class="banner" style="background:var(--soft);text-align:center">⏳ ${esc(user(st.turn).display_name)} ist dran …</div>`;
+  return `${status}<div class="bsw"><div><div class="bst">🎯 Gegner (${hitsMe}/17 Treffer)</div>${attack}</div><div><div class="bst">⚓ Deine Flotte (${hitsOpp}/17 getroffen)</div>${def}</div></div>${legend}`;
+}
+function bindBs(d, me) {
+  const sh = $('#bshuf'); if (sh) sh.onclick = () => { S.bsDraft = randomFleet(); renderDuel(); };
+  const rd = $('#bready'); if (rd) rd.onclick = async () => { rd.disabled = true; const { error } = await sb.rpc('bs_place', { p_duel: d.id, p_ships: S.bsDraft }); if (error) { toast(errMsg(error), 1); rd.disabled = false; return; } S.bsDraft = null; await loadAll(); renderDuel(); };
+  document.querySelectorAll('[data-shot]').forEach(b => b.onclick = async () => {
+    if (S.busy) return; S.busy = true; const [x, y] = b.dataset.shot.split(',').map(Number);
+    const { data, error } = await sb.rpc('bs_shoot', { p_duel: d.id, p_x: x, p_y: y }); S.busy = false;
+    if (error) return toast(errMsg(error), 1);
+    toast(data.won ? '🏆 Alle Schiffe versenkt – gewonnen!' : data.result === 'sunk' ? `💥 Versenkt! (${data.sunk.length}er) – nochmal!` : data.result === 'hit' ? '🔥 Treffer – nochmal!' : '🌊 Wasser');
+    await loadAll(); renderDuel();
+  });
+}
+
+// ---------- Freunde ----------
+function viewFriends() {
+  const inc = incomingReq();
+  const q = S.fq.trim().toLowerCase();
+  const others = S.users.filter(u => u.id !== S.me.id);
+  const fr = myFriends();
+  const outgoing = S.friends.filter(f => f.status === 'pending' && f.requested_by === S.me.id).map(f => f.user_a === S.me.id ? f.user_b : f.user_a);
+  const found = q ? others.filter(u => u.display_name.toLowerCase().includes(q) || u.username.includes(q.replace(/^@/, ''))) : others.filter(u => !isFriend(u.id));
+  const btn = u => { const f = friendRow(u.id);
+    if (f?.status === 'accepted') return `<span class="pill grn">✓ Freund</span>`;
+    if (f && f.requested_by === S.me.id) return `<span class="pill">Angefragt</span>`;
+    if (f) return `<button class="btn sm" data-facc="${u.id}">Annehmen</button>`;
+    return `<button class="btn sm" data-fadd="${u.id}">＋ Hinzufügen</button>`; };
+  return {
+    html: `<div class="h1">Freunde</div><div class="sub">Nur Freunde können sich gegenseitig zu Duellen einladen und Nachrichten schreiben. Füge Leute über ihren Namen oder aus der Liste hinzu.</div>
+    ${inc.length ? `<div class="sec-t">Anfragen an dich (${inc.length})</div><div class="card" style="padding:6px 16px">${inc.map(f => `<div class="lrow">${av(f.requested_by)}<div style="flex:1"><b>${esc(user(f.requested_by).display_name)}</b><div class="meta">@${esc(user(f.requested_by).username)} möchte mit dir befreundet sein</div></div><button class="btn sm" data-facc="${f.requested_by}">Annehmen</button><button class="btn sec sm" data-fdec="${f.requested_by}">Ablehnen</button></div>`).join('')}</div>` : ''}
+    <div class="sec-t">Meine Freunde (${fr.length})</div>
+    ${fr.length ? `<div class="card" style="padding:6px 16px">${fr.map(u => { const lp = (S.lb || []).find(x => x.user_id === u.id)?.points || 0; return `<div class="lrow">${av(u.id)}<div style="flex:1;min-width:0"><b>${esc(u.display_name)}</b> ${rankBadge(lp)}<div class="meta">@${esc(u.username)} · ${lp} Punkte</div></div><button class="btn sec sm" data-fchat="${u.id}">💬</button><button class="btn sm" data-fduel="${u.id}">⚔️ Duell</button><button class="btn red sm" data-frem="${u.id}" title="Freund entfernen">✕</button></div>`; }).join('')}</div>` : '<div class="empty">Noch keine Freunde – such unten nach Leuten.</div>'}
+    <div class="sec-t">Leute finden</div>
+    <div class="search"><input class="inp" id="fsearch" placeholder="Name oder @benutzername suchen …" value="${esc(S.fq)}" autocomplete="off" autocapitalize="none"></div>
+    <div class="card" style="padding:6px 16px" id="flist">${found.length ? found.map(u => `<div class="lrow">${av(u.id)}<div style="flex:1;min-width:0"><b>${esc(u.display_name)}</b><div class="meta">@${esc(u.username)}</div></div>${btn(u)}</div>`).join('') : `<div class="empty" style="border:0">${q ? 'Niemand gefunden.' : 'Du bist schon mit allen befreundet 🎉'}</div>`}</div>
+    ${outgoing.length ? `<p style="color:var(--mut);font-size:13px">Offene Anfragen von dir: ${outgoing.map(id => esc(user(id).display_name)).join(', ')}</p>` : ''}`,
+    bind() {
+      const inp = $('#fsearch'); inp.oninput = () => { S.fq = inp.value; const pos = inp.selectionStart; render(); const n = $('#fsearch'); n.focus(); n.setSelectionRange(pos, pos); };
+      const act = async (fn, args, msg) => { const { data, error } = await sb.rpc(fn, args); if (error) return toast(errMsg(error), 1); toast(msg || (data === 'angenommen' ? 'Ihr seid jetzt Freunde 🤝' : 'Anfrage gesendet')); await loadAll(); render(); };
+      document.querySelectorAll('[data-fadd]').forEach(b => b.onclick = () => act('friend_request', { p_user: b.dataset.fadd }));
+      document.querySelectorAll('[data-facc]').forEach(b => b.onclick = () => act('friend_respond', { p_user: b.dataset.facc, p_accept: true }, 'Ihr seid jetzt Freunde 🤝'));
+      document.querySelectorAll('[data-fdec]').forEach(b => b.onclick = () => act('friend_respond', { p_user: b.dataset.fdec, p_accept: false }, 'Anfrage abgelehnt'));
+      document.querySelectorAll('[data-frem]').forEach(b => b.onclick = async () => { if (!await confirmBox(`${user(b.dataset.frem).display_name} als Freund entfernen?`)) return; act('friend_remove', { p_user: b.dataset.frem }, 'Entfernt'); });
+      document.querySelectorAll('[data-fchat]').forEach(b => b.onclick = () => openChat(b.dataset.fchat));
+      document.querySelectorAll('[data-fduel]').forEach(b => b.onclick = () => { S.newDuel.opp = new Set([b.dataset.fduel]); S.tab = 'new'; render(); });
+    }
+  };
+}
+
 // ---------- Nachrichten ----------
 function openChat(id) { S.openDuel = null; history.replaceState(null, '', location.pathname); S.tab = 'chat'; S.chatWith = id; S.menu = false; render(); }
 function convList() {
-  const others = S.users.filter(u => u.id !== S.me.id);
+  const q = S.cq.trim().toLowerCase();
+  const others = S.users.filter(u => u.id !== S.me.id && (isFriend(u.id) || S.msgs.some(m => m.from_id === u.id || m.to_id === u.id)))
+    .filter(u => !q || u.display_name.toLowerCase().includes(q) || u.username.includes(q.replace(/^@/, '')));
   const last = id => { const ms = S.msgs.filter(m => (m.from_id === id && m.to_id === S.me.id) || (m.to_id === id && m.from_id === S.me.id)); return ms[ms.length - 1]; };
   return others.map(u => ({ u, last: last(u.id) })).sort((a, b) => (b.last ? new Date(b.last.created_at) : 0) - (a.last ? new Date(a.last.created_at) : 0) || a.u.display_name.localeCompare(b.u.display_name));
 }
@@ -620,26 +903,27 @@ function chatMsgsHtml(id) {
 }
 function convListHtml() {
   const L = convList();
-  if (!L.length) return '<div class="empty">Noch keine anderen Spieler.</div>';
+  if (!L.length) return `<div class="empty" style="border:0">${S.cq ? 'Niemand gefunden.' : 'Noch keine Freunde. Füge im Tab „Freunde“ Leute hinzu.'}</div>`;
   return L.map(({ u, last }) => { const n = unreadFrom(u.id); return `<div class="citem ${S.chatWith === u.id ? 'on' : ''}" data-chat="${u.id}">${av(u.id)}<div style="flex:1;min-width:0"><b>${esc(u.display_name)}</b><div class="pv">${last ? (last.from_id === S.me.id ? 'Du: ' : '') + esc(last.body) : '@' + esc(u.username)}</div></div>${n ? `<span class="ubadge">${n}</span>` : ''}</div>`; }).join('');
 }
 function viewChat() {
   const w = S.chatWith && S.users.find(u => u.id === S.chatWith) ? S.chatWith : null;
   return {
     html: `<div class="h1">Nachrichten</div><div class="sub">Schreib direkt mit anderen Spielern – nur ihr beide könnt die Nachrichten lesen.</div>
-    <div class="chat ${w ? 'open' : ''}"><div class="card clist" id="clist">${convListHtml()}</div>
-    <div class="card cwin">${w ? `<div class="chead"><button class="btn sec sm" id="cback">←</button>${av(w)}<div style="flex:1"><b>${esc(user(w).display_name)}</b><div class="meta" style="font-size:12px;color:var(--mut)">@${esc(user(w).username)}</div></div><button class="btn sec sm" id="cduel">⚔️ Herausfordern</button></div>
+    <div class="chat ${w ? 'open' : ''}"><div class="card clist"><div class="search"><input class="inp" id="csearch" placeholder="Freunde suchen …" value="${esc(S.cq)}" autocomplete="off"></div><div id="clist">${convListHtml()}</div></div>
+    <div class="card cwin">${w ? `<div class="chead"><button class="btn sec sm" id="cback">←</button>${av(w)}<div style="flex:1"><b>${esc(user(w).display_name)}</b><div class="meta" style="font-size:12px;color:var(--mut)">@${esc(user(w).username)}</div></div>${isFriend(w) ? '<button class="btn sec sm" id="cduel">⚔️ Herausfordern</button>' : ''}</div>
       <div class="cmsgs" id="cmsgs">${chatMsgsHtml(w)}</div>
-      <form class="cform" id="cf2"><textarea class="inp" id="ct" placeholder="Nachricht …" maxlength="2000">${esc(S.msgDraft[w] || '')}</textarea><button class="btn">Senden</button></form>`
+      ${isFriend(w) ? `<form class="cform" id="cf2"><textarea class="inp" id="ct" placeholder="Nachricht …" maxlength="2000">${esc(S.msgDraft[w] || '')}</textarea><button class="btn">Senden</button></form>` : '<div class="cform" style="color:var(--mut);font-size:14px;justify-content:center">Ihr seid nicht (mehr) befreundet – schreiben geht erst wieder als Freunde.</div>'}`
       : '<div class="empty" style="margin:auto;border:0">Wähle links eine Person aus.</div>'}</div></div>`,
     bind() {
       document.querySelectorAll('[data-chat]').forEach(c => c.onclick = () => { S.chatWith = c.dataset.chat; render(); });
+      const cs = $('#csearch'); cs.oninput = () => { S.cq = cs.value; updateChat(); };
       if (!w) return;
       const box = $('#cmsgs'); box.scrollTop = box.scrollHeight;
       markRead(w);
       $('#cback').onclick = () => { S.chatWith = null; render(); };
-      $('#cduel').onclick = () => { S.newDuel.opp = new Set([w]); S.tab = 'new'; render(); };
-      const t = $('#ct'); t.oninput = () => { S.msgDraft[w] = t.value; t.style.height = '44px'; t.style.height = Math.min(120, t.scrollHeight) + 'px'; };
+      const cd = $('#cduel'); if (cd) cd.onclick = () => { S.newDuel.opp = new Set([w]); S.tab = 'new'; render(); };
+      const t = $('#ct'); if (!t) return; t.oninput = () => { S.msgDraft[w] = t.value; t.style.height = '44px'; t.style.height = Math.min(120, t.scrollHeight) + 'px'; };
       t.onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#cf2').requestSubmit(); } };
       if (matchMedia('(min-width:701px)').matches) t.focus();
       $('#cf2').onsubmit = async e => {
@@ -656,13 +940,13 @@ function updateChat() {
   const w = S.chatWith; const box = $('#cmsgs'); const cl = $('#clist');
   if (cl) { cl.innerHTML = convListHtml(); cl.querySelectorAll('[data-chat]').forEach(c => c.onclick = () => { S.chatWith = c.dataset.chat; render(); }); }
   if (box && w) { const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80; box.innerHTML = chatMsgsHtml(w); if (atBottom) box.scrollTop = box.scrollHeight; markRead(w); }
-  const tab = document.querySelector('[data-tab=chat]'); if (tab) tab.innerHTML = 'Nachrichten' + (unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : '');
+  const tab = document.querySelector('[data-tab=chat]'); if (tab) tab.innerHTML = '<span class="l">Nachrichten</span><span class="s">💬</span>' + (unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : '');
 }
 async function markRead(w) {
   if (!S.msgs.some(m => m.from_id === w && m.to_id === S.me.id && !m.read_at)) return;
   S.msgs.forEach(m => { if (m.from_id === w && m.to_id === S.me.id && !m.read_at) m.read_at = new Date().toISOString(); });
   await sb.rpc('mark_read', { p_other: w });
-  const tab = document.querySelector('[data-tab=chat]'); if (tab) tab.innerHTML = 'Nachrichten' + (unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : '');
+  const tab = document.querySelector('[data-tab=chat]'); if (tab) tab.innerHTML = '<span class="l">Nachrichten</span><span class="s">💬</span>' + (unreadTotal() ? `<span class="dot">${unreadTotal()}</span>` : '');
 }
 
 // ===================== Dialoge =====================
@@ -693,13 +977,16 @@ function changePw() {
 function showHelp() {
   modal(`<h2>So funktioniert Wort-Duell</h2>
     <p class="mut">Wordless &amp; Clueless gegen deine Freunde – alle bekommen dasselbe geheime Wort, wer mit weniger Versuchen löst, gewinnt.</p>
-    <h3>⚔️ Duell starten</h3><p>Unter <b>Neues Duell</b> wählst du das Spiel (bei Wordless auch die Wortlänge 3–8) und hakst die Gegner an. Die Eingeladenen sehen die Einladung sofort unter <b>Duelle</b> und nehmen an oder lehnen ab. Ohne Gegner ist es eine Übungsrunde (zählt nicht für die Rangliste).</p>
+    <h3>👥 Freunde</h3><p>Spielen und schreiben kannst du nur mit Freunden. Im Tab <b>Freunde</b> suchst du nach Name oder @benutzername (oder nimmst jemanden aus der Liste) und schickst eine Anfrage. Sobald die andere Person annimmt, seid ihr befreundet. Anfragen an dich erscheinen oben im Tab und als Hinweis oben rechts.</p>
+    <h3>⚔️ Duell starten</h3><p>Unter <b>Neues Duell</b> wählst du das Spiel und hakst Freunde an. Die Eingeladenen sehen die Einladung sofort und nehmen an oder lehnen ab. Wordless/Clueless gehen auch allein als Übung (zählt nicht für die Rangliste).</p>
     <h3>🟩 Wordless</h3><p>Du hast 6 Versuche. Jeder Versuch muss ein echtes deutsches Wort mit der richtigen Länge sein.<br><b style="color:var(--grn)">Grün</b> = Buchstabe stimmt an dieser Stelle · <b style="color:#d49a00">Gelb</b> = Buchstabe kommt vor, aber woanders · <b style="color:var(--gry)">Grau</b> = kommt nicht vor. Tippen geht mit der Tastatur am Bildschirm oder am Computer.</p>
     <h3>🎯 Clueless</h3><p>Keine Buchstaben, keine Hinweise. Jedes Wort, das du eingibst, bekommt einen <b>Rang</b>: wie nah es von der <i>Bedeutung</i> her am geheimen Wort liegt. Rang 1 ist das Wort selbst, Rang 2 das ähnlichste usw. Starte mit breiten Begriffen („Tier“, „Essen“, „Gefühl“, „Ort“) und geh in die Richtung, in der die Zahl kleiner wird. Unbegrenzt viele Versuche – wenn's nicht klappt, kannst du aufgeben.</p>
+    <h3>🎭 Wer bin ich?</h3><p>Ab 2 Spielern. Wer das Spiel erstellt, startet es, sobald alle angenommen haben. Jeder bekommt eine berühmte Person oder Figur – deine eigene siehst du nicht, die der anderen schon. Wer dran ist, stellt eine Ja/Nein-Frage. Alle anderen stimmen <b>RICHTIG</b> oder <b>FALSCH</b> ab – es zählt die Mehrheit (bei Gleichstand FALSCH). Bei RICHTIG darfst du nochmal fragen, bei FALSCH ist der Nächste dran. Mit „Lösen“ rätst du deinen Namen (kleine Tippfehler und nur der Nachname zählen auch). Falsch geraten = der Nächste ist dran. Gewonnen hat, wer zuerst richtig rät; die anderen spielen um die Plätze weiter.</p>
+    <h3>🚢 Schiffe versenken</h3><p>Zu zweit. Beide platzieren ihre Flotte (5er, 4er, zwei 3er, 2er – mit „Neu mischen“ zufällig), dann „Bereit“. Wer beginnt, wird ausgelost. Klick auf ein Feld beim Gegner: <b>Wasser</b> = der andere ist dran, <b>Treffer</b> = du darfst nochmal. Wer zuerst alle 17 Schiffsfelder trifft, gewinnt.</p>
     <h3>👀 Live-Stand</h3><p>Rechts (am Handy oben) siehst du live, wie viele Versuche jeder hat und wer schon fertig ist – aber <b>nie, was die anderen eingeben</b>. Das Lösungswort wird erst angezeigt, wenn alle fertig sind.</p>
     <h3>🏆 Wer gewinnt?</h3><p>Wer das Wort mit den <b>wenigsten Versuchen</b> löst. Bei Gleichstand gewinnt, wer zuerst fertig war. Das Duell endet automatisch, wenn alle fertig sind oder abgelehnt haben. Wer das Duell erstellt hat, kann es auch vorzeitig beenden.</p>
-    <h3>💬 Nachrichten</h3><p>Im Tab <b>Nachrichten</b> schreibst du direkt mit einem anderen Spieler – nur ihr beide seht den Chat. Neue Nachrichten erscheinen live, ungelesene zählt der rote Punkt. Enter sendet, Shift+Enter macht eine neue Zeile. Mit „⚔️ Herausfordern“ startest du direkt ein Duell gegen die Person, im Live-Stand eines Duells öffnet 💬 den Chat.</p>
-    <h3>📊 Rangliste</h3><p>Zeigt alle Siege, gespielte Duelle, Siegquote und Siege je Spiel.</p>
+    <h3>💬 Nachrichten</h3><p>Im Tab <b>Nachrichten</b> schreibst du direkt mit einem anderen Spieler – nur ihr beide seht den Chat. Neue Nachrichten erscheinen live und oben rechts als Hinweis, ungelesene zählt der rote Punkt. Mit der Suche findest du Freunde schnell. Enter sendet, Shift+Enter macht eine neue Zeile. Mit „⚔️ Herausfordern“ startest du direkt ein Duell gegen die Person, im Live-Stand eines Duells öffnet 💬 den Chat.</p>
+    <h3>🏆 Punkte &amp; Ränge</h3><p>Für jedes beendete Duell mit mindestens zwei Spielern gibt's <b>+2 Punkte</b> fürs Mitspielen und <b>+20 Punkte</b> für den Sieg (+5 für jeden weiteren Gegner). Ränge: 🥉 Bronze (0) · 🥈 Silber (60) · 🥇 Gold (150) · 💠 Platin (300) · 💎 Diamant (500) · 👑 Meister (800) · 🔥 Legende (1200). Deinen Rang und den Fortschritt siehst du in der Rangliste und im Menü oben rechts.</p>
     <h3>🔑 Konto</h3><p>Accounts legt nur Luca (Admin) an. Dein Passwort änderst du über den runden Knopf oben rechts. Dort kannst du auch Browser-Benachrichtigungen für neue Einladungen einschalten.</p>
     ${S.profile?.is_admin ? `<h3>🛠 Admin</h3><p>Im Tab <b>Admin</b>: Account anlegen → die fertige Nachricht mit Link, Benutzername und Passwort kopieren oder per WhatsApp schicken. „Neues Passwort“ setzt ein vergessenes Passwort zurück. Die Wortdaten müssen nur einmal geladen werden.</p>` : ''}
     <p class="mut" style="margin-top:18px;font-size:13px">Wort-Duell · von Luca Kofler</p>
