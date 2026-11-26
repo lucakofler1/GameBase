@@ -1231,7 +1231,7 @@ function swHtml(d, me) {
   const lastEv = [...(st.events || [])].reverse().find(e => ['one', 'all', 'pass', 'knock', 'newtable', 'deal'].includes(e.t));
   const info = lastEv ? ({ one: `${esc(user(lastEv.u).display_name)} hat eine Karte getauscht`, all: `${esc(user(lastEv.u).display_name)} hat alle drei getauscht`, pass: `${esc(user(lastEv.u).display_name)} hat geschoben`, knock: `✊ ${esc(user(lastEv.u).display_name)} hat geklopft – letzte Runde!`, newtable: 'Alle haben geschoben – neue Karten in der Mitte!', deal: `Runde ${lastEv.round} – neue Karten` })[lastEv.t] : '';
   return `${seatsHtml}
-    <div class="swtable"><div style="font-size:13px;opacity:.85;margin-bottom:10px">${info || 'Mitte'}${st.knock && st.knock !== S.me.id ? ' · <b>Letzte Runde!</b>' : ''}</div>
+    <div class="swtable"><div style="font-size:13px;opacity:.85;margin-bottom:10px">${info || 'Mitte'}${st.knock && st.knock !== S.me.id && lastEv?.t !== 'knock' ? ' · <b>Letzte Runde!</b>' : ''}</div>
       <div class="cards">${tbl.map((c, i) => cardHtml(c, myT ? { btn: `data-swt="${i}"`, sel: sel.t === i } : {})).join('')}</div></div>
     <div class="swhand">${myLives < 0 ? '<div class="empty">Du bist untergegangen 💀 – schau den anderen beim Schwimmen zu.</div>' : `
       <div style="color:var(--mut);font-size:13px;margin-bottom:8px">Deine Karten</div>
