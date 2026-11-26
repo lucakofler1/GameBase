@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wort-Duell</title>
+<title>GameBase</title>
 <meta name="theme-color" content="#f5f5f7">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='22' width='100' height='100' fill='%230071e3'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>W</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='22' width='100' height='100' fill='%230071e3'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>G</text></svg>">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#f5f5f7;--card:#fff;--ink:#1d1d1f;--mut:#6e6e73;--line:#e3e3e8;--acc:#0071e3;--soft:#f0f0f4;--red:#ff3b30;--grn:#34c759;--yel:#ffb800;--gry:#8e8e93;--sh:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);--r:18px}
@@ -405,7 +405,7 @@ async function refresh() { try { await loadAll(); render(true); } catch (e) { co
 
 // ===================== Auth =====================
 async function boot() {
-  if (SUPABASE_URL.startsWith('__')) { $('#app').innerHTML = `<div class="login"><div class="card"><div class="logo"><i>W</i>Wort-Duell</div><p class="sub" style="text-align:center">Die Datenbank ist noch nicht verbunden.</p></div></div>`; return; }
+  if (SUPABASE_URL.startsWith('__')) { $('#app').innerHTML = `<div class="login"><div class="card"><div class="logo"><i>G</i>GameBase</div><p class="sub" style="text-align:center">Die Datenbank ist noch nicht verbunden.</p></div></div>`; return; }
   const { data } = await sb.auth.getSession();
   if (data.session) await enter(data.session.user); else renderLogin();
   sb.auth.onAuthStateChange((ev, session) => { if (ev === 'SIGNED_OUT') { S.me = null; renderLogin(); } });
@@ -413,7 +413,7 @@ async function boot() {
 function renderLogin(msg, mode) {
   const reg = mode === 'register';
   $('#app').innerHTML = `<div class="login"><form class="card" id="lf">
-    <div class="logo"><i>W</i>Wort-Duell</div>
+    <div class="logo"><i>G</i>GameBase</div>
     <p class="sub" style="text-align:center;margin-bottom:8px">${reg ? 'Neuen Account erstellen' : 'Spiele gegen deine Freunde'}</p>
     ${reg ? `<label class="l">Anzeigename (sehen die anderen)</label><input class="inp" id="ld" placeholder="z. B. Max Mustermann" maxlength="40" required>` : ''}
     <label class="l">Benutzername${reg ? ' (zum Einloggen, 3–30 Zeichen: a–z, 0–9, . _ -)' : ''}</label><input class="inp" id="lu" autocomplete="username" autocapitalize="none" required>
@@ -422,7 +422,7 @@ function renderLogin(msg, mode) {
     ${msg ? `<p style="color:var(--red);font-size:14px;margin:12px 0 0">${esc(msg)}</p>` : ''}
     <button class="btn" style="width:100%;margin-top:18px" id="lb">${reg ? 'Account erstellen' : 'Anmelden'}</button>
     <p style="text-align:center;margin:14px 0 0;font-size:14px">${reg ? 'Schon einen Account? <a href="#" id="lsw">Anmelden</a>' : 'Noch keinen Account? <a href="#" id="lsw">Jetzt registrieren</a>'}</p>
-    <p class="credit">Wort-Duell · von Luca Kofler</p>
+    <p class="credit">GameBase · von Luca Kofler</p>
   </form></div>`;
   $('#lsw').onclick = e => { e.preventDefault(); renderLogin('', reg ? 'login' : 'register'); };
   $('#lf').onsubmit = async e => {
@@ -437,7 +437,7 @@ function renderLogin(msg, mode) {
     const { data, error } = await sb.auth.signInWithPassword({ email: un + EMAIL_DOMAIN, password: pw });
     if (error) return renderLogin(reg ? 'Account erstellt, aber Anmelden hat nicht geklappt – bitte nochmal einloggen.' : 'Benutzername oder Passwort falsch.');
     await enter(data.user);
-    if (reg) { S.tab = 'friends'; render(); push({ title: '👋 Willkommen bei Wort-Duell!', body: 'Füge hier deine Freunde hinzu – dann könnt ihr gegeneinander spielen und schreiben.' }); }
+    if (reg) { S.tab = 'friends'; render(); push({ title: '👋 Willkommen bei GameBase!', body: 'Füge hier deine Freunde hinzu – dann könnt ihr gegeneinander spielen und schreiben.' }); }
   };
 }
 async function enter(u) {
@@ -453,7 +453,7 @@ function shell(content) {
   const inv = myInvites().length, turn = myTurn().length;
   const badge = inv + turn;
   return `<header class="top"><div class="wrap bar">
-    <div class="logo"><i>W</i><span>Wort-Duell</span></div>
+    <div class="logo"><i>G</i><span>GameBase</span></div>
     <span class="spacer"></span>
     <nav class="tabs">
       <button class="tab ${S.tab === 'duels' ? 'on' : ''}" data-tab="duels"><span class="l">Duelle</span><span class="s">⚔️</span>${badge ? `<span class="dot">${badge}</span>` : ''}</button>
@@ -470,7 +470,7 @@ function shell(content) {
     </div>
   </div></header>
   <main class="wrap" id="main">${content}</main>
-  <footer>Wort-Duell · von Luca Kofler</footer>`;
+  <footer>GameBase · von Luca Kofler</footer>`;
 }
 function render(soft) {
   if (!S.me) return;
@@ -640,7 +640,7 @@ async function loadWordData() {
   } catch (e) { p.textContent = 'Fehler: ' + errMsg(e); b.disabled = false; }
 }
 function showInvite(name, un, pw, isNew) {
-  const text = `Hey ${name.split(' ')[0]}! ${isNew ? 'Ich hab dir einen Account für Wort-Duell angelegt – Wordless & Clueless gegeneinander 🎯' : 'Hier dein neues Passwort für Wort-Duell:'}\n\n🔗 ${SITE_URL}\n👤 Benutzername: ${un}\n🔑 Passwort: ${pw}\n\nDas Passwort kannst du nach dem Einloggen oben rechts ändern.`;
+  const text = `Hey ${name.split(' ')[0]}! ${isNew ? 'Ich hab dir einen Account für GameBase angelegt – Wordless, Clueless, Wer bin ich?, Schiffe versenken & Mensch ärgere dich nicht gegeneinander 🎮' : 'Hier dein neues Passwort für GameBase:'}\n\n🔗 ${SITE_URL}\n👤 Benutzername: ${un}\n🔑 Passwort: ${pw}\n\nDas Passwort kannst du nach dem Einloggen oben rechts ändern.`;
   modal(`<h2>${isNew ? 'Account angelegt ✓' : 'Neues Passwort ✓'}</h2><p class="mut">Schick ${esc(name)} diese Nachricht. Das Passwort wird nur jetzt angezeigt.</p>
     <div class="invite">${esc(text)}</div>
     <div class="row"><button class="btn" id="cp">Kopieren</button><a class="btn sec" style="text-decoration:none" target="_blank" href="https://wa.me/?text=${encodeURIComponent(text)}">WhatsApp</a>${navigator.share ? '<button class="btn sec" id="sh">Teilen …</button>' : ''}<span class="spacer"></span><button class="btn sec" data-close>Fertig</button></div>`,
@@ -1221,7 +1221,7 @@ function changePw() {
   });
 }
 function showHelp() {
-  modal(`<h2>So funktioniert Wort-Duell</h2>
+  modal(`<h2>So funktioniert GameBase</h2>
     <p class="mut">Wordless &amp; Clueless gegen deine Freunde – alle bekommen dasselbe geheime Wort, wer mit weniger Versuchen löst, gewinnt.</p>
     <h3>👥 Freunde</h3><p>Spielen und schreiben kannst du nur mit Freunden. Im Tab <b>Freunde</b> suchst du nach Name oder @benutzername (oder nimmst jemanden aus der Liste) und schickst eine Anfrage. Sobald die andere Person annimmt, seid ihr befreundet. Anfragen an dich erscheinen oben im Tab und als Hinweis oben rechts.</p>
     <h3>⚔️ Duell starten</h3><p>Unter <b>Neues Duell</b> wählst du das Spiel und hakst Freunde an. Die Eingeladenen sehen die Einladung sofort und nehmen an oder lehnen ab. Wordless/Clueless gehen auch allein als Übung (zählt nicht für die Rangliste).</p>
@@ -1236,7 +1236,7 @@ function showHelp() {
     <h3>🏆 Punkte &amp; Ränge</h3><p>Für jedes beendete Duell mit mindestens zwei Spielern gibt's <b>+2 Punkte</b> fürs Mitspielen und <b>+20 Punkte</b> für den Sieg (+5 für jeden weiteren Gegner). Ränge: 🥉 Bronze (0) · 🥈 Silber (60) · 🥇 Gold (150) · 💠 Platin (300) · 💎 Diamant (500) · 👑 Meister (800) · 🔥 Legende (1200). Deinen Rang und den Fortschritt siehst du in der Rangliste und im Menü oben rechts.</p>
     <h3>🔑 Konto</h3><p>Einen Account kannst du dir auf der Anmeldeseite selbst erstellen („Jetzt registrieren“) – oder Luca legt ihn für dich an. Dein Passwort änderst du über den runden Knopf oben rechts. Dort kannst du auch Browser-Benachrichtigungen für neue Einladungen einschalten.</p>
     ${S.profile?.is_admin ? `<h3>🛠 Admin</h3><p>Im Tab <b>Admin</b>: Account anlegen → die fertige Nachricht mit Link, Benutzername und Passwort kopieren oder per WhatsApp schicken. „Neues Passwort“ setzt ein vergessenes Passwort zurück. Die Wortdaten müssen nur einmal geladen werden.</p>` : ''}
-    <p class="mut" style="margin-top:18px;font-size:13px">Wort-Duell · von Luca Kofler</p>
+    <p class="mut" style="margin-top:18px;font-size:13px">GameBase · von Luca Kofler</p>
     <div class="row" style="justify-content:flex-end"><button class="btn" data-close>Alles klar</button></div>`);
 }
 
