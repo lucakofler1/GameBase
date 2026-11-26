@@ -1,4 +1,4 @@
--- GameBase · Update 7: Schwimmen (31)
+-- GameBase · Update 7: Hosn obe (Schwimmen / 31)
 alter table public.duels drop constraint if exists duels_game_check;
 alter table public.duels add constraint duels_game_check check (game in ('wordless','clueless','werbinich','schiffe','mensch','schwimmen'));
 
@@ -221,7 +221,7 @@ begin
   elsif p_game = 'mensch' then
     if n < 1 or n > 3 then raise exception 'Mensch ärgere dich nicht: 2 bis 4 Spieler'; end if; s := '-';
   elsif p_game = 'schwimmen' then
-    if n < 1 or n > 8 then raise exception 'Schwimmen: 2 bis 9 Spieler'; end if; s := '-';
+    if n < 1 or n > 8 then raise exception 'Hosn obe: 2 bis 9 Spieler'; end if; s := '-';
   else raise exception 'Unbekanntes Spiel'; end if;
   if s is null then raise exception 'Wortdaten fehlen – Admin muss sie zuerst laden'; end if;
   insert into duels(game, word_length, max_attempts, created_by, state)
