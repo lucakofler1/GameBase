@@ -260,6 +260,32 @@ button.cell{cursor:pointer}button.cell:hover{background:color-mix(in srgb,var(--
 .gcform{display:flex;gap:6px;padding:10px}
 .gcform input{flex:1}
 @media (max-width:700px){.gcbtn{bottom:86px;right:14px}.gcpanel{right:8px;left:8px;width:auto;bottom:80px;height:60vh}}
+.gico.w31{background:linear-gradient(135deg,#30b0c7,#0a84ff 60%,#5e5ce6);color:#fff}
+/* Schwimmen */
+.swseats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px}
+.swseat{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:14px;background:var(--soft);font-size:14px;transition:all .2s}
+.swseat.turn{background:color-mix(in srgb,var(--acc) 16%,var(--card));outline:2px solid var(--acc)}
+.swseat.out{opacity:.45;text-decoration:line-through}
+.swseat .lv{font-size:13px;letter-spacing:1px}
+.swtable{background:radial-gradient(ellipse at center,#1f8a4c 0,#166b3a 70%);border-radius:24px;padding:22px 16px;box-shadow:inset 0 0 0 4px #0f5a2f,inset 0 6px 20px rgba(0,0,0,.35);text-align:center;color:#e9fff0}
+.cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.card{width:74px;height:106px;border-radius:10px;background:#fff;color:#1d1d1f;box-shadow:0 3px 0 rgba(0,0,0,.25),0 8px 16px rgba(0,0,0,.2);position:relative;border:0;padding:0;font-family:Georgia,serif;cursor:default;transition:transform .15s,box-shadow .15s}
+.card.red{color:#d70015}
+.card .tl{position:absolute;top:6px;left:8px;font-size:17px;font-weight:700;line-height:1;text-align:center}
+.card .br{position:absolute;bottom:6px;right:8px;font-size:17px;font-weight:700;line-height:1;transform:rotate(180deg);text-align:center}
+.card .mid{position:absolute;inset:0;display:grid;place-items:center;font-size:36px}
+.card.back{background:repeating-linear-gradient(45deg,#0a84ff 0 6px,#0071e3 6px 12px);box-shadow:inset 0 0 0 4px #fff,0 3px 0 rgba(0,0,0,.25)}
+button.card{cursor:pointer}button.card:hover{transform:translateY(-6px)}
+.card.sel{transform:translateY(-12px);box-shadow:0 0 0 3px #ffcc00,0 14px 24px rgba(0,0,0,.3)}
+.card.pop{animation:cpop .45s}
+@keyframes cpop{0%{transform:rotateY(90deg) scale(.8)}100%{transform:rotateY(0) scale(1)}}
+.swhand{margin-top:18px;text-align:center}
+.swscore{display:inline-block;margin-top:10px;font-weight:800;font-size:18px;padding:4px 14px;border-radius:20px;background:var(--soft)}
+.swact{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.swrev{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:14px}
+.swrev .r{background:var(--soft);border-radius:16px;padding:12px}
+.swrev .r.lose{background:color-mix(in srgb,var(--red) 14%,var(--card))}
+.swrev .card{width:52px;height:74px}.swrev .card .mid{font-size:24px}.swrev .card .tl,.swrev .card .br{font-size:13px}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:10px 0 30px}
 @media (max-width:700px){.tabs{position:fixed;bottom:0;left:0;right:0;border-radius:0;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);z-index:25}.tab{flex:1;font-size:13px;padding:8px 4px}main{padding-bottom:110px}.h1{font-size:26px}.bar .spacer{flex:1}}
 </style>
@@ -277,7 +303,7 @@ const SITE_URL = location.origin + location.pathname.replace(/index\.html$/, '')
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { storageKey: 'wortduell-auth', persistSession: true } });
 
 // ===================== Zustand =====================
-const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, wbiMode: 'random', gchat: { open: false, msgs: [], duel: null },  madKickSeen: {}, madSeen: {}, madDisp: {}, lastInvites: null, msgs: [], chatWith: null, msgDraft: {}, friends: [], fq: '', cq: '', wbi: null, bs: null, bsDraft: null, lb: null };
+const S = { me: null, profile: null, tab: 'duels', users: [], duels: [], players: [], openDuel: null, myGuesses: [], wl: null, draft: '', menu: false, newDuel: { game: 'wordless', len: 5, opp: new Set() }, board: [], adminData: null, wbiMode: 'random', swSeen: {}, swSel: { h: null, t: null }, swHand: null, gchat: { open: false, msgs: [], duel: null },  madKickSeen: {}, madSeen: {}, madDisp: {}, lastInvites: null, msgs: [], chatWith: null, msgDraft: {}, friends: [], fq: '', cq: '', wbi: null, bs: null, bsDraft: null, lb: null };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const COLORS = ['#0a84ff', '#30b0c7', '#34c759', '#ff9f0a', '#ff375f', '#bf5af2', '#5e5ce6', '#ff6482', '#64d2ff', '#ac8e68'];
@@ -293,6 +319,7 @@ const GAME = {
   clueless: { name: 'Clueless', ico: '?', cls: 'c', unit: 'Versuche', desc: 'Keine Hinweise: Jedes Wort bekommt einen Rang, wie nah es von der Bedeutung her am geheimen Wort liegt.' },
   werbinich: { name: 'Wer bin ich?', ico: '🎭', cls: 'p', unit: 'Fragen', desc: 'Jeder bekommt eine berühmte Person oder Figur. Stell Ja/Nein-Fragen – die anderen stimmen RICHTIG oder FALSCH ab. Ab 2 Spielern.' },
   schiffe: { name: 'Schiffe versenken', ico: '🚢', cls: 's', unit: 'Schüsse', desc: 'Der Klassiker zu zweit: Flotte platzieren, abwechselnd schießen – wer zuerst alle Schiffe versenkt, gewinnt.' },
+  schwimmen: { name: 'Hosn obe', ico: '🃏', cls: 'w31', unit: 'Züge', desc: 'Das Kartenspiel für 2–9 Spieler: drei Karten einer Farbe möglichst nah an 31. Wer die wenigsten Punkte hat, verliert ein Leben – dann wird geschwommen. 🏊' },
   mensch: { name: 'Mensch ärgere dich nicht', ico: '🎲', cls: 'm', unit: 'Würfe', desc: 'Der Brettspiel-Klassiker für 2–4 Spieler. Würfeln, ziehen, rauswerfen – und dabei richtig provozieren. 😈' },
 };
 const RANKS = [
@@ -380,6 +407,12 @@ function turnInfo(d) {
     if (st.phase === 'assign') return (st.done || []).includes(S.me.id) ? { mine: false, label: 'Warte auf Namen der anderen' } : { mine: true, label: 'Namen vergeben' };
     if (st.qid && st.turn !== S.me.id) return { mine: true, label: `Abstimmen: ${user(st.turn).display_name} fragt` };
     return st.turn === S.me.id ? { mine: true, label: 'Du bist dran – stell eine Frage' } : { mine: false, label: `${user(st.turn).display_name} ist dran` };
+  }
+  if (d.game === 'schwimmen') {
+    if (st.phase === 'lobby') return d.created_by === S.me.id ? { mine: true, label: 'Spiel starten' } : { mine: false, label: 'Warte auf Start' };
+    if (st.phase === 'reveal') return { mine: false, label: 'Runde vorbei' };
+    if ((st.lives?.[S.me.id] ?? -1) < 0) return { mine: false, label: 'Ausgeschieden 💀' };
+    return st.turn === S.me.id ? { mine: true, label: 'Du bist dran!' } : { mine: false, label: `${user(st.turn).display_name} ist dran` };
   }
   if (d.game === 'mensch') {
     if (st.phase === 'lobby') return d.created_by === S.me.id ? { mine: true, label: 'Spiel starten' } : { mine: false, label: 'Warte auf Start' };
@@ -555,8 +588,8 @@ function viewDuels() {
 // ---------- Neues Duell ----------
 function viewNew() {
   const N = S.newDuel; const others = myFriends(); [...N.opp].forEach(id => { if (!isFriend(id)) N.opp.delete(id); });
-  const hint = N.game === 'schiffe' ? (N.opp.size !== 1 ? 'Schiffe versenken: genau eine Person einladen.' : '') : N.game === 'werbinich' ? (N.opp.size < 1 ? 'Wer bin ich?: mindestens eine Person einladen.' : '') : N.game === 'mensch' ? (N.opp.size < 1 || N.opp.size > 3 ? 'Mensch ärgere dich nicht: 1 bis 3 Personen einladen (2–4 Spieler).' : '') : '';
-  const rule = N.game === 'mensch' ? 'Gewonnen hat, wer zuerst alle 4 Figuren ins Ziel bringt.' : N.game === 'werbinich' ? 'Gewonnen hat, wer zuerst errät, wer er ist.' : N.game === 'schiffe' ? 'Gewonnen hat, wer zuerst alle gegnerischen Schiffe versenkt.' : 'Gewonnen hat, wer mit den wenigsten Versuchen löst. Bei Gleichstand zählt, wer schneller war.';
+  const hint = N.game === 'schiffe' ? (N.opp.size !== 1 ? 'Schiffe versenken: genau eine Person einladen.' : '') : N.game === 'werbinich' ? (N.opp.size < 1 ? 'Wer bin ich?: mindestens eine Person einladen.' : '') : N.game === 'mensch' ? (N.opp.size < 1 || N.opp.size > 3 ? 'Mensch ärgere dich nicht: 1 bis 3 Personen einladen (2–4 Spieler).' : '') : N.game === 'schwimmen' ? (N.opp.size < 1 || N.opp.size > 8 ? 'Hosn obe: 1 bis 8 Personen einladen (2–9 Spieler).' : '') : '';
+  const rule = N.game === 'schwimmen' ? 'Wer als Letzter nicht untergegangen ist, gewinnt.' : N.game === 'mensch' ? 'Gewonnen hat, wer zuerst alle 4 Figuren ins Ziel bringt.' : N.game === 'werbinich' ? 'Gewonnen hat, wer zuerst errät, wer er ist.' : N.game === 'schiffe' ? 'Gewonnen hat, wer zuerst alle gegnerischen Schiffe versenkt.' : 'Gewonnen hat, wer mit den wenigsten Versuchen löst. Bei Gleichstand zählt, wer schneller war.';
   return {
     html: `<div class="h1">Neues Duell</div><div class="sub">Spiel wählen, Freunde einladen, los geht's.</div>
     <div class="grid g2">${Object.entries(GAME).map(([k, g]) => `<button class="choice ${N.game === k ? 'on' : ''}" data-game="${k}"><div class="gico ${g.cls}">${g.ico}</div><b>${g.name}</b><small>${g.desc}</small></button>`).join('')}</div>
@@ -592,8 +625,8 @@ function viewRank() {
         <div class="ranks">${RANKS.map(r => `<span class="rankb" style="background:${r.c};opacity:${mp >= r.min ? 1 : .35}" title="ab ${r.min} Punkten">${r.ico} ${r.name} <small style="font-weight:500">${r.min}</small></span>`).join('')}</div></div></div>`;
       const top = L.filter(x => x.points > 0).slice(0, 3);
       const pod = top.length ? `<div class="podium">${[1, 0, 2].map(i => top[i] ? `<div class="pod ${i === 0 ? 'p1' : ''}"><div class="m">${medals[i]}</div>${av(top[i].user_id).replace('class="av"', 'class="av" style="margin:6px auto 0;width:40px;height:40px;font-size:17px;background:' + colorFor(top[i].user_id) + '"')}<div class="nm">${esc(top[i].display_name)}</div><div class="w">${top[i].points} Punkte · ${top[i].wins} ${top[i].wins === 1 ? 'Sieg' : 'Siege'}</div></div>` : '<div></div>').join('')}</div>` : '';
-      $('#rk').innerHTML = rc + pod + `<div class="card" style="padding:8px 16px;overflow-x:auto"><table><thead><tr><th>#</th><th>Spieler</th><th>Rang</th><th class="num">Punkte</th><th class="num">Siege</th><th class="num">Duelle</th><th class="num">Quote</th><th class="num" title="Wordless">W</th><th class="num" title="Clueless">?</th><th class="num" title="Wer bin ich?">🎭</th><th class="num" title="Schiffe versenken">🚢</th><th class="num" title="Mensch ärgere dich nicht">🎲</th></tr></thead><tbody>
-        ${L.map((x, i) => `<tr${x.user_id === S.me.id ? ' style="font-weight:700"' : ''}><td>${i + 1}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap">${av(x.user_id)}${esc(x.display_name)}</div></td><td>${rankBadge(x.points)}</td><td class="num"><b>${x.points}</b></td><td class="num">${x.wins}</td><td class="num">${x.played}</td><td class="num">${x.played ? Math.round(x.wins / x.played * 100) + ' %' : '–'}</td><td class="num">${x.wins_wordless}</td><td class="num">${x.wins_clueless}</td><td class="num">${x.wins_werbinich}</td><td class="num">${x.wins_schiffe}</td><td class="num">${x.wins_mensch ?? 0}</td></tr>`).join('')}
+      $('#rk').innerHTML = rc + pod + `<div class="card" style="padding:8px 16px;overflow-x:auto"><table><thead><tr><th>#</th><th>Spieler</th><th>Rang</th><th class="num">Punkte</th><th class="num">Siege</th><th class="num">Duelle</th><th class="num">Quote</th><th class="num" title="Wordless">W</th><th class="num" title="Clueless">?</th><th class="num" title="Wer bin ich?">🎭</th><th class="num" title="Schiffe versenken">🚢</th><th class="num" title="Mensch ärgere dich nicht">🎲</th><th class="num" title="Hosn obe">🃏</th></tr></thead><tbody>
+        ${L.map((x, i) => `<tr${x.user_id === S.me.id ? ' style="font-weight:700"' : ''}><td>${i + 1}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap">${av(x.user_id)}${esc(x.display_name)}</div></td><td>${rankBadge(x.points)}</td><td class="num"><b>${x.points}</b></td><td class="num">${x.wins}</td><td class="num">${x.played}</td><td class="num">${x.played ? Math.round(x.wins / x.played * 100) + ' %' : '–'}</td><td class="num">${x.wins_wordless}</td><td class="num">${x.wins_clueless}</td><td class="num">${x.wins_werbinich}</td><td class="num">${x.wins_schiffe}</td><td class="num">${x.wins_mensch ?? 0}</td><td class="num">${x.wins_schwimmen ?? 0}</td></tr>`).join('')}
       </tbody></table></div>`;
     }
   };
@@ -689,6 +722,8 @@ async function loadGameData(id) {
     const qids = (q.data || []).map(x => x.id);
     const v = qids.length ? await sb.from('wbi_votes').select('*').in('question_id', qids.slice(-50)) : { data: [] };
     S.wbi = { names: n.data || [], qs: q.data || [], votes: v.data || [] };
+  } else if (d.game === 'schwimmen') {
+    const { data } = await sb.from('sw_hands').select('cards').eq('duel_id', id).maybeSingle(); S.swHand = data?.cards || null;
   } else if (d.game === 'schiffe') {
     const [b, s] = await Promise.all([sb.from('bs_boards').select('*').eq('duel_id', id), sb.from('bs_shots').select('*').eq('duel_id', id).order('id')]);
     S.bs = { boards: b.data || [], shots: s.data || [] };
@@ -755,11 +790,12 @@ function renderDuel(soft) {
   if (d.status === 'finished') {
     if (!S.secret) sb.rpc('duel_secret', { p_duel: d.id }).then(r => { if (r.data) { S.secret = r.data; renderDuel(); } });
     const word = ['wordless', 'clueless'].includes(d.game);
+    if (d.game === 'schwimmen') { const ev = (d.state?.events || []).filter(e => e.seq > (S.swSeen[d.id] ?? 1e9)); if (ev.length) setTimeout(() => swShowEvents(d), 50); }
     top = `<div class="banner ${d.winner_id === S.me.id ? 'win' : 'info'}">${d.winner_id ? (d.winner_id === S.me.id ? '🏆 Du hast gewonnen!' : `🏆 ${esc(user(d.winner_id).display_name)} hat gewonnen.`) : (word ? 'Niemand hat das Wort gelöst.' : 'Kein Sieger.')} ${word && S.secret ? `Das Wort war <b>${esc(S.secret.toUpperCase())}</b>.` : ''}</div>`;
   } else if (me?.status === 'invited') top = `<div class="banner info">Du wurdest zu diesem Duell eingeladen. <button class="btn sm" id="acc" style="margin-left:8px">Annehmen &amp; spielen</button> <button class="btn sec sm" id="dec">Ablehnen</button></div>`;
   else if (me && me.status !== 'playing' && ['wordless', 'clueless'].includes(d.game)) top = `<div class="banner info">${me.status === 'solved' ? `✓ Gelöst mit ${me.attempts} Versuchen! ` : ''}Warte, bis alle fertig sind – dann siehst du den Sieger und das Wort.</div>`;
   else if (me && me.status === 'solved' && d.game === 'werbinich') top = `<div class="banner win">✓ Du hast es erraten! Stimm weiter mit ab, bis alle fertig sind.</div>`;
-  const body = { wordless: wordlessHtml, clueless: cluelessHtml, werbinich: wbiHtml, schiffe: bsHtml, mensch: madHtml }[d.game](d, me);
+  const body = { wordless: wordlessHtml, clueless: cluelessHtml, werbinich: wbiHtml, schiffe: bsHtml, mensch: madHtml, schwimmen: swHtml }[d.game](d, me);
   $('#app').innerHTML = shell(`<div class="row" style="margin-bottom:14px"><button class="btn sec sm" id="back">← Zurück</button><div class="gico ${g.cls}" style="width:34px;height:34px;font-size:16px;border-radius:10px">${g.ico}</div><b style="font-size:20px">${g.name}${d.word_length ? ` · ${d.word_length} Buchstaben` : ''}</b><span class="spacer"></span>
     ${d.status === 'open' && me?.status === 'playing' ? '<button class="btn red sm" id="giveup">Aufgeben</button>' : ''}
     ${d.status === 'open' && (d.created_by === S.me.id || S.profile.is_admin) ? '<button class="btn sec sm" id="endd">Duell beenden</button>' : ''}</div>
@@ -771,14 +807,14 @@ function renderDuel(soft) {
   const gu = $('#giveup'); if (gu) gu.onclick = async () => { if (!await confirmBox('Wirklich aufgeben? Dann kannst du dieses Duell nicht mehr gewinnen.')) return; const { error } = await sb.rpc('give_up', { p_duel: d.id }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); };
   const en = $('#endd'); if (en) en.onclick = async () => { if (!await confirmBox('Duell jetzt beenden? Wer noch spielt, gilt als ausgeschieden; offene Einladungen verfallen.')) return; const { error } = await sb.rpc('end_duel', { p_duel: d.id }); if (error) return toast(errMsg(error), 1); await loadAll(); renderDuel(); };
   if (keyHandler) { document.removeEventListener('keydown', keyHandler); keyHandler = null; }
-  ({ wordless: bindWordless, clueless: bindClueless, werbinich: bindWbi, schiffe: bindBs, mensch: bindMad })[d.game](d, me);
+  ({ wordless: bindWordless, clueless: bindClueless, werbinich: bindWbi, schiffe: bindBs, mensch: bindMad, schwimmen: bindSw })[d.game](d, me);
 }
 function updateSide(d) {
   const el = $('#side'); if (!el) return;
   setTimeout(() => el.querySelectorAll('[data-msg]').forEach(b => b.onclick = () => openChat(b.dataset.msg)), 0);
   const ps = playersOf(d.id).filter(p => p.status !== 'declined').sort((a, b) => d.game === 'werbinich' ? ((a.status === 'solved' ? 0 : 1) - (b.status === 'solved' ? 0 : 1) || new Date(a.finished_at || 0) - new Date(b.finished_at || 0)) : ((a.status === 'solved' ? 0 : 1) - (b.status === 'solved' ? 0 : 1) || a.attempts - b.attempts));
   el.innerHTML = `<div class="row" style="margin-bottom:6px"><b>Live-Stand</b><span class="spacer"></span>${d.status === 'open' ? '<span class="pill grn">● live</span>' : '<span class="pill">beendet</span>'}</div>
-    <p style="color:var(--mut);font-size:12px;margin:0 0 6px">${d.game === 'mensch' ? 'Würfe je Spieler.' : d.game === 'werbinich' ? 'Fragen = gestellte Fragen + Rateversuche.' : d.game === 'schiffe' ? 'Abgegebene Schüsse je Spieler.' : 'Du siehst nur, wie viele Versuche die anderen haben – nicht, was sie eingeben.'}</p>
+    <p style="color:var(--mut);font-size:12px;margin:0 0 6px">${d.game === 'schwimmen' ? 'Züge je Spieler. Leben siehst du im Spielfeld.' : d.game === 'mensch' ? 'Würfe je Spieler.' : d.game === 'werbinich' ? 'Fragen = gestellte Fragen + Rateversuche.' : d.game === 'schiffe' ? 'Abgegebene Schüsse je Spieler.' : 'Du siehst nur, wie viele Versuche die anderen haben – nicht, was sie eingeben.'}</p>
     ${ps.map(p => `<div class="lrow">${av(p.user_id)}<div style="flex:1;min-width:0"><b>${esc(user(p.user_id).display_name)}${p.user_id === S.me.id ? ' (du)' : ''}</b> ${d.winner_id === p.user_id ? '🏆' : ''}${p.user_id !== S.me.id && isFriend(p.user_id) ? ` <button class="btn sec sm" style="padding:2px 7px" data-msg="${p.user_id}" title="Nachricht schreiben">💬</button>` : ''}${d.game === 'werbinich' && d.state?.turn === p.user_id && d.status === 'open' ? ' <span class="pill blu" style="font-size:11px">am Zug</span>' : ''}${['schiffe', 'mensch'].includes(d.game) && d.state?.turn === p.user_id && d.status === 'open' && d.state?.phase === 'play' ? ' <span class="pill blu" style="font-size:11px">am Zug</span>' : ''}${d.game === 'mensch' && d.state?.seats ? ` <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${MAD_COL[d.state.seats.indexOf(p.user_id)] || 'transparent'}"></span>` : ''}<div class="meta"><span class="pill ${STATUS[p.status][1]}" style="font-size:11px">${STATUS[p.status][0]}</span>${d.game === 'clueless' && p.best_rank ? ` · bester Rang ${p.best_rank.toLocaleString('de-AT')}` : ''}</div></div><div style="text-align:right"><div class="big">${p.attempts}</div><div class="meta">${d.game === 'wordless' ? 'von 6' : GAME[d.game].unit}</div></div></div>`).join('')}
     ${''}${playersOf(d.id).some(p => p.status === 'declined') ? `<p style="color:var(--mut);font-size:12px;margin:8px 0 0">Abgelehnt: ${playersOf(d.id).filter(p => p.status === 'declined').map(p => esc(user(p.user_id).display_name)).join(', ')}</p>` : ''}`;
 }
@@ -1159,6 +1195,107 @@ function bindMad(d, me) {
   document.addEventListener('keydown', keyHandler);
 }
 
+// ----- Schwimmen -----
+const SW_SUIT = { c: '♣', s: '♠', h: '♥', d: '♦' }, SW_RANK = { 7: '7', 8: '8', 9: '9', T: '10', J: 'B', Q: 'D', K: 'K', A: 'A' };
+const swVal = c => c[1] === 'A' ? 11 : 'TJQK'.includes(c[1]) ? 10 : +c[1];
+function swScore(cs) {
+  if (!cs || cs.length < 3) return 0;
+  if (cs.every(c => c[1] === 'A')) return 32;
+  let best = Math.max(...['c', 's', 'h', 'd'].map(s => cs.filter(c => c[0] === s).reduce((a, c) => a + swVal(c), 0)));
+  if (cs[0][1] === cs[1][1] && cs[1][1] === cs[2][1]) best = Math.max(best, 30.5);
+  return best;
+}
+const fmtSc = s => s === 32 ? '🔥 Feuer (32)' : s === 30.5 ? '30½' : String(s);
+function cardHtml(c, opts = {}) {
+  if (!c) return `<div class="card back"></div>`;
+  const red = c[0] === 'h' || c[0] === 'd'; const r = SW_RANK[c[1]], s = SW_SUIT[c[0]];
+  const inner = `<span class="tl">${r}<br>${s}</span><span class="mid">${s}</span><span class="br">${r}<br>${s}</span>`;
+  return opts.btn ? `<button class="card ${red ? 'red' : ''} ${opts.sel ? 'sel' : ''} ${opts.pop ? 'pop' : ''}" ${opts.btn}>${inner}</button>` : `<div class="card ${red ? 'red' : ''} ${opts.pop ? 'pop' : ''}">${inner}</div>`;
+}
+const swLives = n => n < 0 ? '💀' : n === 0 ? '🏊' : '❤️'.repeat(n);
+function swHtml(d, me) {
+  const st = d.state || {};
+  if (st.phase === 'lobby') return madLobbyHtml(d, me);
+  const seats = st.seats || []; const myLives = st.lives?.[S.me.id] ?? -1;
+  const seatsHtml = `<div class="swseats">${seats.map(u => { const l = st.lives?.[u] ?? -1; return `<div class="swseat ${st.turn === u && st.phase === 'play' ? 'turn' : ''} ${l < 0 ? 'out' : ''}">${av(u)}<div><b>${esc(user(u).display_name.split(' ')[0])}${u === S.me.id ? ' (du)' : ''}</b>${st.knock === u ? ' ✊' : ''}${st.dealer === u ? ' <span title="Geber" style="font-size:11px;color:var(--mut)">(gibt)</span>' : ''}<div class="lv">${swLives(l)}${l === 0 ? ' <span style="font-size:11px;color:var(--mut)">schwimmt</span>' : ''}</div></div></div>`; }).join('')}</div>`;
+  if (st.phase === 'reveal' && st.reveal) {
+    const rev = st.reveal; const losers = st.losers || [];
+    const last = [...(st.events || [])].reverse().find(e => e.t === 'reveal');
+    const why = { knock: 'Es wurde geklopft – Karten auf den Tisch!', schnauz: '👖 HOSN! Jemand hat 31!', fire: '🔥 FEUER! Drei Asse!', deal31: '31 schon beim Geben!', deckempty: 'Stapel leer – Karten auf den Tisch!' }[last?.reason] || 'Runde vorbei';
+    return `${seatsHtml}<div class="banner info" style="text-align:center;font-size:17px"><b>${why}</b><br>${losers.length ? `Ein Leben verliert: <b>${losers.map(u => esc(user(u).display_name)).join(', ')}</b> 😬` : ''}</div>
+      <div class="swrev">${Object.keys(rev).sort((a, b) => rev[b].score - rev[a].score).map(u => `<div class="r ${losers.includes(u) ? 'lose' : ''}"><div class="row" style="margin-bottom:8px">${av(u)}<b>${esc(user(u).display_name)}</b><span class="spacer"></span><span class="swscore" style="margin:0;font-size:15px">${fmtSc(rev[u].score)}</span></div><div class="cards">${(rev[u].cards || []).map(c => cardHtml(c)).join('')}</div>${losers.includes(u) ? `<div style="margin-top:6px;font-size:13px;color:var(--red);font-weight:700">−1 ❤️ ${(st.lives[u] ?? 0) < 0 ? '→ UNTERGEGANGEN 💀' : (st.lives[u] === 0 ? '→ schwimmt jetzt 🏊' : '')}</div>` : ''}</div>`).join('')}</div>
+      ${d.status === 'open' ? `<div class="row" style="justify-content:center;margin-top:16px"><button class="btn" id="swnext">Nächste Runde ▶</button><span style="color:var(--mut);font-size:13px" id="swauto">startet automatisch …</span></div>` : ''}`;
+  }
+  const hand = S.swHand; const tbl = st.table || []; const sel = S.swSel;
+  const myT = d.status === 'open' && st.turn === S.me.id && myLives >= 0 && me?.status === 'playing';
+  const lastEv = [...(st.events || [])].reverse().find(e => ['one', 'all', 'pass', 'knock', 'newtable', 'deal'].includes(e.t));
+  const info = lastEv ? ({ one: `${esc(user(lastEv.u).display_name)} hat eine Karte getauscht`, all: `${esc(user(lastEv.u).display_name)} hat alle drei getauscht`, pass: `${esc(user(lastEv.u).display_name)} hat geschoben`, knock: `✊ ${esc(user(lastEv.u).display_name)} hat geklopft – letzte Runde!`, newtable: 'Alle haben geschoben – neue Karten in der Mitte!', deal: `Runde ${lastEv.round} – neue Karten` })[lastEv.t] : '';
+  return `${seatsHtml}
+    <div class="swtable"><div style="font-size:13px;opacity:.85;margin-bottom:10px">${info || 'Mitte'}${st.knock && st.knock !== S.me.id ? ' · <b>Letzte Runde!</b>' : ''}</div>
+      <div class="cards">${tbl.map((c, i) => cardHtml(c, myT ? { btn: `data-swt="${i}"`, sel: sel.t === i } : {})).join('')}</div></div>
+    <div class="swhand">${myLives < 0 ? '<div class="empty">Du bist untergegangen 💀 – schau den anderen beim Schwimmen zu.</div>' : `
+      <div style="color:var(--mut);font-size:13px;margin-bottom:8px">Deine Karten</div>
+      <div class="cards">${(hand || [null, null, null]).map((c, i) => cardHtml(c, myT && c ? { btn: `data-swh="${i}"`, sel: sel.h === i } : {})).join('')}</div>
+      <div class="swscore">${hand ? fmtSc(swScore(hand)) + ' Punkte' : ''}</div>
+      ${myT ? `<div class="swact">
+        <button class="btn" id="swone" ${sel.h == null || sel.t == null ? 'disabled' : ''}>🔄 Tauschen${sel.h == null || sel.t == null ? ' (je 1 Karte wählen)' : ''}</button>
+        <button class="btn sec" id="swall">⇅ Alle 3 tauschen</button>
+        <button class="btn sec" id="swpass">⏭ Schieben</button>
+        ${!st.knock ? '<button class="btn" id="swknock" style="background:#ff9f0a">✊ Klopfen</button>' : ''}</div>
+        <p style="color:var(--mut);font-size:12px;margin:10px 0 0">Tipp: Erst eine deiner Karten und eine aus der Mitte antippen, dann „Tauschen“.${st.knock ? ' Nach diesem Zug wird aufgedeckt (wenn du der Letzte bist).' : ''}</p>`
+      : d.status === 'open' ? `<p style="color:var(--mut);margin-top:12px">${esc(user(st.turn).display_name)} ist dran …</p>` : ''}`}</div>`;
+}
+function bindSw(d, me) {
+  const sb2 = $('#madstart'); if (sb2) sb2.onclick = async () => { sb2.disabled = true; const { error } = await sb.rpc('sw_start', { p_duel: d.id }); if (error) { toast(errMsg(error), 1); sb2.disabled = false; return; } await loadAll(); renderDuel(); };
+  const st = d.state || {};
+  if (S.swSeen[d.id] == null) S.swSeen[d.id] = st.seq || 0;
+  if (st.turn !== S.me.id) S.swSel = { h: null, t: null };
+  document.querySelectorAll('[data-swh]').forEach(b => b.onclick = () => { S.swSel.h = S.swSel.h === +b.dataset.swh ? null : +b.dataset.swh; renderDuel(); });
+  document.querySelectorAll('[data-swt]').forEach(b => b.onclick = () => { S.swSel.t = S.swSel.t === +b.dataset.swt ? null : +b.dataset.swt; renderDuel(); });
+  const act = async (a, x) => { if (S.busy) return; S.busy = true; const { data, error } = await sb.rpc('sw_action', { p_duel: d.id, p_action: a, p_hand: x?.h ?? null, p_table: x?.t ?? null }); S.busy = false;
+    if (error) return toast(errMsg(error), 1); S.swSel = { h: null, t: null }; await loadAll(); renderDuel(); };
+  const one = $('#swone'); if (one) one.onclick = () => act('one', S.swSel);
+  const all = $('#swall'); if (all) all.onclick = () => act('all');
+  const pass = $('#swpass'); if (pass) pass.onclick = () => act('pass');
+  const kn = $('#swknock'); if (kn) kn.onclick = async () => { if (!await confirmBox('Klopfen? Dann ist jeder andere noch genau einmal dran, danach wird aufgedeckt.')) return; act('knock'); };
+  const nx = $('#swnext');
+  if (nx) {
+    const go = async () => { clearTimeout(S.swAutoT); clearInterval(S.swAutoI); if (S.openDuel !== d.id) return; await sb.rpc('sw_next_round', { p_duel: d.id }); await loadAll(); renderDuel(); };
+    nx.onclick = go;
+    const key = d.id + ':' + st.round;
+    if (S.swAutoKey !== key) { S.swAutoKey = key; S.swAutoAt = Date.now() + 12000; clearTimeout(S.swAutoT); clearInterval(S.swAutoI);
+      S.swAutoT = setTimeout(go, 12000);
+      S.swAutoI = setInterval(() => { const l = $('#swauto'); if (l) l.textContent = `startet automatisch in ${Math.max(0, Math.ceil((S.swAutoAt - Date.now()) / 1000))} s`; }, 500); }
+    const l = $('#swauto'); if (l) l.textContent = `startet automatisch in ${Math.max(0, Math.ceil((S.swAutoAt - Date.now()) / 1000))} s`;
+  }
+  swShowEvents(d);
+}
+const TAUNT_SWIM = ['Blub blub… 🫧', 'Schwimmflügerl an! 🦆', 'Nur noch ein Fehler… 😬', 'Na, Wasser kalt? 🥶', 'Hält sich gerade noch über Wasser 🏊'];
+const TAUNT_OUT = ['Abgesoffen! 🫧💀', 'Wie ein Stein 🪨', 'Titanic-Moment 🚢🧊', 'Gute Nacht, Matrose 😴', 'Glug glug glug… 🫧🫧'];
+async function swShowEvents(d) {
+  if (S.swShowing) return; S.swShowing = true;
+  try {
+    const st = d.state || {}; const seen = S.swSeen[d.id] ?? st.seq;
+    const evs = (st.events || []).filter(e => e.seq > seen);
+    for (const e of evs) {
+      S.swSeen[d.id] = e.seq;
+      if (e.t === 'knock' && e.u !== S.me.id) toast(`✊ ${user(e.u).display_name} hat geklopft – letzte Runde!`);
+      if (e.t === 'schnauz' || e.t === 'fire') await swBigShow(e.t === 'fire' ? '🔥' : '👖', e.t === 'fire' ? 'FEUER!' : 'HOSN!', `${esc(user(e.u).display_name)} ${e.t === 'fire' ? 'hat drei Asse' : 'hat 31'}!`, e.u === S.me.id ? ['🏆', '😎', '💰'] : ['😱', '🤯', '😭'], e.u === S.me.id ? 'win' : 'boing', e.u === S.me.id);
+      if (e.t === 'swim') await swBigShow('🏊', e.u === S.me.id ? 'DU SCHWIMMST!' : 'SCHWIMMT!', e.u === S.me.id ? pick(TAUNT_SWIM) : `${esc(user(e.u).display_name)}: ${pick(TAUNT_SWIM)}`, ['🫧', '🌊', '🦆', '🏊', '💦'], e.u === S.me.id ? 'sad' : 'boing', false);
+      if (e.t === 'out' && !e.quit) await swBigShow('💀', e.u === S.me.id ? 'UNTERGEGANGEN!' : 'ABGESOFFEN!', e.u === S.me.id ? pick(TAUNT_OUT) + ' Du bist raus.' : `${esc(user(e.u).display_name)}: ${pick(TAUNT_OUT)}`, ['🫧', '💀', '🪦', '🌊', '😂', '🤡'], e.u === S.me.id ? 'sad' : 'boing', false);
+      if (e.t === 'win') madWinShow(e);
+    }
+  } finally { S.swShowing = false; }
+}
+async function swBigShow(emoji, big, sub, rain, sound, mine) {
+  emojiRain(rain, 34);
+  const ov = document.createElement('div'); ov.className = 'kickov flash' + (mine ? ' mine' : '');
+  ov.innerHTML = `<div class="kbox"><div class="ke">${emoji}</div><div class="kt" style="${big.includes('FEUER') ? 'color:#ff9f0a' : big.includes('HOSN!') ? 'color:#0a84ff' : ''}">${big}</div><div class="ks">${sub}</div></div>`;
+  document.body.appendChild(ov); ov.onclick = () => ov.remove(); sfx(sound);
+  if (sound === 'sad' && navigator.vibrate) navigator.vibrate([120, 60, 300]);
+  await sleep(2200); ov.remove();
+}
+
 // ---------- Freunde ----------
 function viewFriends() {
   const inc = incomingReq();
@@ -1302,6 +1439,7 @@ function showHelp() {
     <h3>🚢 Schiffe versenken</h3><p>Zu zweit. Beide platzieren ihre Flotte (5er, 4er, zwei 3er, 2er – mit „Neu mischen“ zufällig), dann „Bereit“. Wer beginnt, wird ausgelost. Klick auf ein Feld beim Gegner: <b>Wasser</b> = der andere ist dran, <b>Treffer</b> = du darfst nochmal. Wer zuerst alle 17 Schiffsfelder trifft, gewinnt.</p>
     <h3>🎲 Mensch ärgere dich nicht</h3><p>2–4 Spieler. Wer das Spiel erstellt, startet es, sobald die anderen angenommen haben. Mit einer <b>6</b> kommst du raus aufs Startfeld und darfst nochmal würfeln. Solange keine Figur auf dem Spielfeld steht, hast du 3 Versuche. Nach dem Würfeln leuchten die Figuren, die ziehen können – antippen. Landest du auf einer gegnerischen Figur, fliegt sie zurück ins Haus (mit gebührender Häme 😈). Auf eigene Figuren darfst du nicht ziehen, im Ziel wird nicht übersprungen und nur exakt eingezogen. Wer zuerst alle 4 Figuren im Ziel hat, gewinnt. Leertaste = würfeln.</p>
     <h3>💬 Spiel-Chat</h3><p>In jedem Spiel gibt es rechts unten den Knopf <b>💬 Chat</b>. Damit öffnest du einen Gruppenchat für alle Spieler dieser Runde – inklusive Schnell-Antworten wie „GG“ oder „Na warte! 😤“. Neue Nachrichten zeigt ein roter Zähler am Knopf.</p>
+    <h3>🃏 Hosn obe (Schwimmen / 31)</h3><p>2–9 Spieler, jeder hat 3 Leben (❤️). Jeder bekommt 3 Karten, 3 liegen offen in der Mitte. Gezählt wird nur eine Farbe: Ass 11, Bild/10 je 10, sonst der Zahlwert. Drei gleiche Karten = 30½, drei Asse = <b>Feuer</b> (32). Wer dran ist: <b>eine Karte tauschen</b> (eigene + Mitte antippen), <b>alle 3 tauschen</b>, <b>schieben</b> oder <b>klopfen</b>. Schieben alle, kommen neue Karten in die Mitte. Nach dem Klopfen ist jeder noch einmal dran, dann wird aufgedeckt. Wer 31 hat („Hosn“), deckt sofort auf. Die wenigsten Punkte verlieren ein Leben (bei Feuer alle anderen). Ohne Leben <b>schwimmst</b> du 🏊 – noch ein Verlust und du gehst <b>unter</b> 💀. Wer als Letzter übrig ist, gewinnt. Die nächste Runde startet nach 12 Sekunden automatisch.</p>
     <h3>👀 Live-Stand</h3><p>Rechts (am Handy oben) siehst du live, wie viele Versuche jeder hat und wer schon fertig ist – aber <b>nie, was die anderen eingeben</b>. Das Lösungswort wird erst angezeigt, wenn alle fertig sind.</p>
     <h3>🏆 Wer gewinnt?</h3><p>Wer das Wort mit den <b>wenigsten Versuchen</b> löst. Bei Gleichstand gewinnt, wer zuerst fertig war. Das Duell endet automatisch, wenn alle fertig sind oder abgelehnt haben. Wer das Duell erstellt hat, kann es auch vorzeitig beenden.</p>
     <h3>💬 Nachrichten</h3><p>Im Tab <b>Nachrichten</b> schreibst du direkt mit einem anderen Spieler – nur ihr beide seht den Chat. Neue Nachrichten erscheinen live und oben rechts als Hinweis, ungelesene zählt der rote Punkt. Mit der Suche findest du Freunde schnell. Enter sendet, Shift+Enter macht eine neue Zeile. Mit „⚔️ Herausfordern“ startest du direkt ein Duell gegen die Person, im Live-Stand eines Duells öffnet 💬 den Chat.</p>
