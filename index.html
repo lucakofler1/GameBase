@@ -410,21 +410,34 @@ async function boot() {
   if (data.session) await enter(data.session.user); else renderLogin();
   sb.auth.onAuthStateChange((ev, session) => { if (ev === 'SIGNED_OUT') { S.me = null; renderLogin(); } });
 }
-function renderLogin(msg) {
+function renderLogin(msg, mode) {
+  const reg = mode === 'register';
   $('#app').innerHTML = `<div class="login"><form class="card" id="lf">
     <div class="logo"><i>W</i>Wort-Duell</div>
-    <p class="sub" style="text-align:center;margin-bottom:8px">Wordless &amp; Clueless gegen deine Freunde</p>
-    <label class="l">Benutzername</label><input class="inp" id="lu" autocomplete="username" autocapitalize="none" required>
-    <label class="l">Passwort</label><input class="inp" id="lp" type="password" autocomplete="current-password" required>
+    <p class="sub" style="text-align:center;margin-bottom:8px">${reg ? 'Neuen Account erstellen' : 'Spiele gegen deine Freunde'}</p>
+    ${reg ? `<label class="l">Anzeigename (sehen die anderen)</label><input class="inp" id="ld" placeholder="z. B. Max Mustermann" maxlength="40" required>` : ''}
+    <label class="l">Benutzername${reg ? ' (zum Einloggen, 3–30 Zeichen: a–z, 0–9, . _ -)' : ''}</label><input class="inp" id="lu" autocomplete="username" autocapitalize="none" required>
+    <label class="l">Passwort${reg ? ' (mind. 6 Zeichen)' : ''}</label><input class="inp" id="lp" type="password" autocomplete="${reg ? 'new-password' : 'current-password'}" required>
+    ${reg ? `<label class="l">Passwort wiederholen</label><input class="inp" id="lp2" type="password" autocomplete="new-password" required>` : ''}
     ${msg ? `<p style="color:var(--red);font-size:14px;margin:12px 0 0">${esc(msg)}</p>` : ''}
-    <button class="btn" style="width:100%;margin-top:18px" id="lb">Anmelden</button>
-    <p class="credit">Zugang bekommst du nur von Luca.<br>Wort-Duell · von Luca Kofler</p>
+    <button class="btn" style="width:100%;margin-top:18px" id="lb">${reg ? 'Account erstellen' : 'Anmelden'}</button>
+    <p style="text-align:center;margin:14px 0 0;font-size:14px">${reg ? 'Schon einen Account? <a href="#" id="lsw">Anmelden</a>' : 'Noch keinen Account? <a href="#" id="lsw">Jetzt registrieren</a>'}</p>
+    <p class="credit">Wort-Duell · von Luca Kofler</p>
   </form></div>`;
+  $('#lsw').onclick = e => { e.preventDefault(); renderLogin('', reg ? 'login' : 'register'); };
   $('#lf').onsubmit = async e => {
     e.preventDefault(); $('#lb').disabled = true;
-    const { data, error } = await sb.auth.signInWithPassword({ email: $('#lu').value.trim().toLowerCase() + EMAIL_DOMAIN, password: $('#lp').value });
-    if (error) return renderLogin('Benutzername oder Passwort falsch.');
+    const un = $('#lu').value.trim().toLowerCase(), pw = $('#lp').value;
+    if (reg) {
+      if (pw !== $('#lp2').value) return renderLogin('Die Passwörter stimmen nicht überein.', 'register');
+      const { error: re } = await sb.rpc('register_account', { p_username: un, p_display: $('#ld').value.trim(), p_password: pw });
+      if (re) return renderLogin(errMsg(re), 'register');
+      toast('Account erstellt – willkommen! 🎉');
+    }
+    const { data, error } = await sb.auth.signInWithPassword({ email: un + EMAIL_DOMAIN, password: pw });
+    if (error) return renderLogin(reg ? 'Account erstellt, aber Anmelden hat nicht geklappt – bitte nochmal einloggen.' : 'Benutzername oder Passwort falsch.');
     await enter(data.user);
+    if (reg) { S.tab = 'friends'; render(); push({ title: '👋 Willkommen bei Wort-Duell!', body: 'Füge hier deine Freunde hinzu – dann könnt ihr gegeneinander spielen und schreiben.' }); }
   };
 }
 async function enter(u) {
@@ -1221,7 +1234,7 @@ function showHelp() {
     <h3>🏆 Wer gewinnt?</h3><p>Wer das Wort mit den <b>wenigsten Versuchen</b> löst. Bei Gleichstand gewinnt, wer zuerst fertig war. Das Duell endet automatisch, wenn alle fertig sind oder abgelehnt haben. Wer das Duell erstellt hat, kann es auch vorzeitig beenden.</p>
     <h3>💬 Nachrichten</h3><p>Im Tab <b>Nachrichten</b> schreibst du direkt mit einem anderen Spieler – nur ihr beide seht den Chat. Neue Nachrichten erscheinen live und oben rechts als Hinweis, ungelesene zählt der rote Punkt. Mit der Suche findest du Freunde schnell. Enter sendet, Shift+Enter macht eine neue Zeile. Mit „⚔️ Herausfordern“ startest du direkt ein Duell gegen die Person, im Live-Stand eines Duells öffnet 💬 den Chat.</p>
     <h3>🏆 Punkte &amp; Ränge</h3><p>Für jedes beendete Duell mit mindestens zwei Spielern gibt's <b>+2 Punkte</b> fürs Mitspielen und <b>+20 Punkte</b> für den Sieg (+5 für jeden weiteren Gegner). Ränge: 🥉 Bronze (0) · 🥈 Silber (60) · 🥇 Gold (150) · 💠 Platin (300) · 💎 Diamant (500) · 👑 Meister (800) · 🔥 Legende (1200). Deinen Rang und den Fortschritt siehst du in der Rangliste und im Menü oben rechts.</p>
-    <h3>🔑 Konto</h3><p>Accounts legt nur Luca (Admin) an. Dein Passwort änderst du über den runden Knopf oben rechts. Dort kannst du auch Browser-Benachrichtigungen für neue Einladungen einschalten.</p>
+    <h3>🔑 Konto</h3><p>Einen Account kannst du dir auf der Anmeldeseite selbst erstellen („Jetzt registrieren“) – oder Luca legt ihn für dich an. Dein Passwort änderst du über den runden Knopf oben rechts. Dort kannst du auch Browser-Benachrichtigungen für neue Einladungen einschalten.</p>
     ${S.profile?.is_admin ? `<h3>🛠 Admin</h3><p>Im Tab <b>Admin</b>: Account anlegen → die fertige Nachricht mit Link, Benutzername und Passwort kopieren oder per WhatsApp schicken. „Neues Passwort“ setzt ein vergessenes Passwort zurück. Die Wortdaten müssen nur einmal geladen werden.</p>` : ''}
     <p class="mut" style="margin-top:18px;font-size:13px">Wort-Duell · von Luca Kofler</p>
     <div class="row" style="justify-content:flex-end"><button class="btn" data-close>Alles klar</button></div>`);
